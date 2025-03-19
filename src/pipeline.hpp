@@ -59,6 +59,8 @@ private:
     uint32_t pc = 0;
     bool forwardingEnabled = false;
 
+    uint32_t signExtend(uint32_t instruction);
+
 public:
     Pipeline(bool enableForwarding);
     void loadInstructions(string filename);
@@ -69,6 +71,7 @@ public:
     void MEM_stage();
     void WB_stage();
     void printPipeline(int cycle);
+    void dumpRegisters();
 };
 
 #endif

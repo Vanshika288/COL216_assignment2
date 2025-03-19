@@ -102,7 +102,9 @@ void Pipeline::ID_stage() {
     id_ex.imm = signExtend(if_id.instruction);
 
     // Set control signals
-    id_ex.control = controlUnit.decode(id_ex.opcode);
+    controlUnit.setControl(id_ex.opcode);
+    id_ex.control = controlUnit;
+
 }
 
 // EX_stage: Execute stage
@@ -112,12 +114,17 @@ void Pipeline::EX_stage() {
         return;
     }
 
-    // Perform ALU operation
-    if (id_ex.control.aluOp) {
-        ex_mem.aluResult = alu.compute(id_ex.opcode, id_ex.func3, id_ex.func7, id_ex.data1, id_ex.data2, id_ex.imm);
-    } else {
-        ex_mem.aluResult = 0;
-    }
+    // // Perform ALU operation
+    // if (id_ex.control.aluOp) {
+    //     ex_mem.aluResult = alu.compute(id_ex.opcode, id_ex.func3, id_ex.func7, id_ex.data1, id_ex.data2, id_ex.imm);
+    // } else {
+    //     ex_mem.aluResult = 0;
+    // }
+
+    // Perform ALU operation based on control signals
+    alu.execute(id_ex.control.aluOp, id_ex.data1, id_ex.control.aluSrc ? id_ex.imm : id_ex.data2);
+    ex_mem.aluResult = alu.result;
+
 
     // Pass data and control to next stage
     ex_mem.rd = id_ex.rd;
@@ -171,6 +178,49 @@ void Pipeline::printPipeline(int cycle) {
     std::cout << "WB: " << (mem_wb.rd ? std::to_string(mem_wb.rd) : "N/A") << "\n";
 }
 
+uint32_t Pipeline::signExtend(uint32_t instruction) {
+    uint32_t imm;
+    uint32_t opcode = instruction & 0x7F;
+
+    if (opcode == 0x13 || opcode == 0x03) {
+        // I-type: Immediate from bits [31:20]
+        imm = (instruction >> 20) & 0xFFF;
+        if (imm & 0x800) {  // Check sign bit (bit 11)
+            imm |= 0xFFFFF000;  // Sign-extend to 32-bit
+        }
+    } else if (opcode == 0x23) {
+        // S-type: Immediate from bits [31:25] and [11:7]
+        imm = ((instruction >> 25) << 5) | ((instruction >> 7) & 0x1F);
+        if (imm & 0x800) {
+            imm |= 0xFFFFF000;
+        }
+    } else if (opcode == 0x63) {
+        // B-type: Immediate for branching
+        imm = ((instruction >> 31) << 12) |
+              ((instruction >> 25) & 0x3F) << 5 |
+              ((instruction >> 8) & 0xF) << 1 |
+              ((instruction >> 7) & 0x1) << 11;
+        if (imm & 0x1000) {
+            imm |= 0xFFFFE000;
+        }
+    } else if (opcode == 0x6F) {
+        // J-type: Immediate for JAL
+        imm = ((instruction >> 31) << 20) |
+              ((instruction >> 21) & 0x3FF) << 1 |
+              ((instruction >> 20) & 0x1) << 11 |
+              ((instruction >> 12) & 0xFF) << 12;
+        if (imm & 0x100000) {
+            imm |= 0xFFE00000;
+        }
+    } else {
+        imm = 0;  // Default case (for R-type or unknown)
+    }
+    return imm;
+}
+
+void Pipeline::dumpRegisters() {
+    reg.dump();  // Call dump from Registers class
+}
 
 
 // void Pipeline::fetch(int &pc) {

@@ -34,24 +34,25 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::vector<std::string> instructions;
-    std::string line;
+    // std::vector<std::string> instructions;
+    // std::string line;
     
-    // Read instructions from the file
-    while (getline(inputFile, line)) {
-        if (!line.empty()) {
-            instructions.push_back(line);
-        }
-    }
+    // // Read instructions from the file
+    // while (getline(inputFile, line)) {
+    //     if (!line.empty()) {
+    //         instructions.push_back(line);
+    //     }
+    // }
 
-    inputFile.close();
+    // inputFile.close();
 
     // Instantiate Pipeline
     bool forwardingEnabled = (std::string(argv[0]).find("forward") != std::string::npos);
     Pipeline pipeline(forwardingEnabled);
 
     // Load instructions into the pipeline
-    pipeline.loadInstructions(instructions);
+    // pipeline.loadInstructions(instructions);
+    pipeline.loadInstructions(filename);
 
     // Run the pipeline for the given number of cycles
     for (int i = 0; i < cycleCount; ++i) {

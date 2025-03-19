@@ -25,21 +25,21 @@ struct ID_EX {
     uint32_t func3 = 0, func7 = 0;
     uint32_t opcode = 0;
     uint32_t data1 = 0, data2 = 0;
-    ControlSignals control;
+    Control control;
 };
 
 struct EX_MEM {
     uint32_t aluResult = 0;
     uint32_t rd = 0;
     uint32_t data2 = 0;
-    ControlSignals control;
+    Control control;
 };
 
 struct MEM_WB {
     uint32_t memData = 0;
     uint32_t aluResult = 0;
     uint32_t rd = 0;
-    ControlSignals control;
+    Control control;
 };
 
 class Pipeline {
@@ -54,6 +54,7 @@ private:
     MEM_WB mem_wb;
 
     vector<string> instructions;
+    vector<uint32_t> instructionMemory;  // ✅ Stores 32-bit machine codes
     unordered_map<uint32_t, uint32_t> memory;
     uint32_t pc = 0;
     bool forwardingEnabled = false;

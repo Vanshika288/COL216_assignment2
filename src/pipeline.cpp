@@ -121,9 +121,12 @@ void Pipeline::ID_stage(int cycle) {
 
         switch (id_ex.opcode) {
             case 0x33:  // add subt etc. // R type
+                cout<<"it's add instr"<<endl;
+                cout<<"intruction"<<if_id.instruction<<endl;
                 id_ex.rs1 = (if_id.instruction >> 15) & 0x1F;
                 id_ex.rs2 = (if_id.instruction >> 20) & 0x1F;
                 id_ex.rd = (if_id.instruction >> 7) & 0x1F;
+                cout<<"register values of add instr : "<<id_ex.rs1<<" "<<id_ex.rs2<<" "<<id_ex.rd<<endl;
                 id_ex.func3 = (if_id.instruction >> 12) & 0x7;
                 id_ex.func7 = (if_id.instruction >> 25) & 0x7F;
                 break;
@@ -209,14 +212,14 @@ void Pipeline::ID_stage(int cycle) {
         cout<<"does not fetch from prev latch"<<endl;
         earlier_stall = true;
     }
-    
-        if (ex_mem.rd != 0){
+        cout<<"print"<<ex_mem.rd<<" "<<mem_wb.rd<<endl;
+        if (ex_mem.rd != 0 && ex_mem.control.regWrite){
             if (ex_mem.rd == id_ex.rs1 || ex_mem.rd==id_ex.rs2){
                 ID_stall = true;
                 id_ex.no_op = true;
             }
         }
-        else if (mem_wb.rd!=0){
+        else if (mem_wb.rd!=0 && mem_wb.control.regWrite){
             if (mem_wb.rd == id_ex.rs1 || mem_wb.rd==id_ex.rs2){
                 ID_stall = true;
                 id_ex.no_op = true;
@@ -261,6 +264,7 @@ void Pipeline::EX_stage(int cycle) {
     cout<<ex_mem.aluResult<<endl;
     // Pass data and control to next stage
     ex_mem.rd = id_ex.rd;
+    cout<<"when it returns zero as alu result : reg value "<<ex_mem.rd<<endl;
     ex_mem.data2 = id_ex.data2;
     ex_mem.control = id_ex.control;
     ex_mem.no_op = false;
@@ -333,58 +337,109 @@ void Pipeline::WB_stage(int cycle) {
 //     std::cout << "WB: " << (mem_wb.rd ? std::to_string(mem_wb.rd) : "N/A") << "\n";
 // }
 
-void Pipeline::printPipeline(){
-    for (int i=0;i<instructions.size();i++){
-        cout<<instructions[i]<<";";
+
+// Print function that is asked in the assignment
+
+// void Pipeline::printPipeline(){
+//     for (int i=0;i<instructions.size();i++){
+//         cout<<instructions[i]<<";";
+//         int s1 = instr_fetch[i];
+//         int s2 = instr_decode[i];
+//         int s3 = instr_execute[i];
+//         int s4 = instr_memory[i];
+//         int s5 = instr_write[i];
+
+//         int cnt = 1;
+//         int cycle = 0;
+//         while(cnt<=5){
+//             if (cnt==1){
+//                 if (s1==cycle) {
+//                     cout<<"IF;";
+//                     cnt++;
+//                 }
+//                 else cout<<"-;";
+//             }
+//             else if (cnt==2){
+//                 if (s2==cycle){
+//                     cout<<"ID;";
+//                     cnt++;
+//                 }
+//                 else cout<<"-;";
+//             }
+//             else if (cnt==3){
+//                 if (s3==cycle){
+//                     cout<<"EX;";
+//                     cnt++;
+//                 }
+//                 else cout<<"-;";
+//             }
+//             else if (cnt==4){
+//                 if (s4==cycle){
+//                     cout<<"MEM;";
+//                     cnt++;
+//                 }
+//                 else cout<<"-;";
+//             }
+//             else if (cnt==5){
+//                 if (s5==cycle){
+//                     cout<<"WB";
+//                     cnt++;
+//                 }
+//                 else cout<<"-;";
+//             }
+//             cycle++;
+//         }
+//         cout<<endl;
+//     }
+// }
+
+
+// Print function for debug stage
+void Pipeline::printPipeline() {
+    // Find the maximum cycle to align properly
+    int maxCycle = 0;
+    for (int i = 0; i < instructions.size(); i++) {
+        maxCycle = max((long long)maxCycle, instr_write[i]);
+    }
+
+    // Print each instruction with aligned stages
+    for (int i = 0; i < instructions.size(); i++) {
+        // Print instruction
+        cout << setw(20) << left << instructions[i] << "|";
+
         int s1 = instr_fetch[i];
         int s2 = instr_decode[i];
         int s3 = instr_execute[i];
         int s4 = instr_memory[i];
         int s5 = instr_write[i];
 
-        int cnt = 1;
-        int cycle = 0;
-        while(cnt<=5){
-            if (cnt==1){
-                if (s1==cycle) {
-                    cout<<"IF;";
-                    cnt++;
-                }
-                else cout<<" ;";
+        // Print cycles with padding to align properly
+        for (int cycle = 0; cycle <= maxCycle; cycle++) {
+            if (cycle == s1) {
+                cout << setw(5) << "IF";
+            } 
+            else if (cycle == s2) {
+                cout << setw(5) << "ID";
+            } 
+            else if (cycle == s3) {
+                cout << setw(5) << "EX";
+            } 
+            else if (cycle == s4) {
+                cout << setw(5) << "MEM";
+            } 
+            else if (cycle == s5) {
+                cout << setw(5) << "WB";
+            } 
+            else {
+                cout << setw(5) << " ";  // Empty cycles for padding
             }
-            else if (cnt==2){
-                if (s2==cycle){
-                    cout<<"ID;";
-                    cnt++;
-                }
-                else cout<<" ;";
-            }
-            else if (cnt==3){
-                if (s3==cycle){
-                    cout<<"EX;";
-                    cnt++;
-                }
-                else cout<<" ;";
-            }
-            else if (cnt==4){
-                if (s4==cycle){
-                    cout<<"MEM;";
-                    cnt++;
-                }
-                else cout<<" ;";
-            }
-            else if (cnt==5){
-                if (s5==cycle){
-                    cout<<"WB";
-                    cnt++;
-                }
-                else cout<<" ;";
-            }
-            cycle++;
         }
-        cout<<endl;
+
+        // Move to next line for next instruction
+        cout << endl;
     }
 }
+
 
 uint32_t Pipeline::signExtend(uint32_t instruction) {
     uint32_t imm;

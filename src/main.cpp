@@ -11,6 +11,42 @@ void printUsage() {
     exit(1);
 }
 
+void separate_columns(string filename){
+    // Open input file
+    ifstream inputFile(filename);
+    if (!inputFile.is_open()) {
+        cerr << "❌ Error: Could not open input file." << endl;
+        return;
+    }
+
+    // Open output files
+    ofstream firstColumnFile("machine_code.txt");
+    ofstream secondColumnFile("assembly_code.txt");
+
+    if (!firstColumnFile.is_open() || !secondColumnFile.is_open()) {
+        cerr << "❌ Error: Could not create output files." << endl;
+        return;
+    }
+
+    string line;
+    while (getline(inputFile, line)) {
+        stringstream ss(line);
+        string firstColumn, secondColumn;
+
+        // Extract first column and second column
+        if (ss >> firstColumn) {
+            getline(ss, secondColumn);  // Get remaining part as second column
+            firstColumnFile << firstColumn << endl;
+            secondColumnFile << secondColumn << endl;
+        }
+    }
+
+    // Close all files
+    inputFile.close();
+    firstColumnFile.close();
+    secondColumnFile.close();
+}
+
 int main(int argc, char* argv[]) {
     if (argc != 3) {
         printUsage();
@@ -27,39 +63,20 @@ int main(int argc, char* argv[]) {
         printUsage();
     }
 
-    // Open the input file
-    std::ifstream inputFile(filename);
-    if (!inputFile.is_open()) {
-        std::cerr << "Error: Could not open file " << filename << std::endl;
-        return 1;
-    }
-
-    // std::vector<std::string> instructions;
-    // std::string line;
-    
-    // // Read instructions from the file
-    // while (getline(inputFile, line)) {
-    //     if (!line.empty()) {
-    //         instructions.push_back(line);
-    //     }
-    // }
-
-    // inputFile.close();
+    // Separate Columns of the input file
+    separate_columns(filename);
 
     // Instantiate Pipeline
     bool forwardingEnabled = (std::string(argv[0]).find("forward") != std::string::npos);
     Pipeline pipeline(forwardingEnabled);
 
     // Load instructions into the pipeline
-    // pipeline.loadInstructions(instructions);
-    pipeline.loadInstructions("inst.txt");
-    pipeline.load_string_instructions("stringinst.txt");
-    // Run the pipeline for the given number of cycles
-    // for (int i = 0; i < cycleCount; ++i) {
-    //     pipeline.runPipeline(i + 1);
-    // }
+    pipeline.loadInstructions("machine_code.txt");
+    pipeline.load_string_instructions("assembly_code.txt");
 
+    // Run the pipeline for the given number of cycles
     pipeline.runPipeline(cycleCount);
+    
     // Print the final state of registers
     std::cout << "\nFinal state of registers:\n";
     pipeline.dumpRegisters();

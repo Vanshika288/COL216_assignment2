@@ -1,0 +1,2 @@
+    add x7, x5, x5
+    addi x8, x7, 1

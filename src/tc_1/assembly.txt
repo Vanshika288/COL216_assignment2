@@ -1,0 +1,20 @@
+# Initialize values
+addi x10, x0, 4       # x10 = 4  (Base address for memory operations)
+addi x6, x0, 10       # x6 = 10  (Value to store in memory)
+
+# Store value in memory
+sw x6, 8(x10)         # Store x6 (10) at address x10 + 8
+
+# Load value from memory
+lw x5, 8(x10)         # Load value from address x10 + 8 into x5 (x5 = 10)
+
+# Introduce dependency - use loaded value immediately
+add x7, x5, x5        # x7 = x5 + x5 (10 + 10 = 20)
+
+# Further dependencies
+addi x8, x7, 1        # x8 = x7 + 1 (20 + 1 = 21)
+sw x8, 12(x10)        # Store x8 (21) at address x10 + 12
+
+# Load the stored value and use it
+lw x9, 12(x10)        # Load value from x10 + 12 into x9 (x9 = 21)
+add x11, x9, x6       # x11 = x9 + x6 (21 + 10 = 31)

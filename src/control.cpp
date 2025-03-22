@@ -14,7 +14,7 @@ Control::Control() {
 // Set control signals based on opcode
 void Control::setControl(uint32_t opcode) {
     switch (opcode) {
-        case 0x33:  // R-type (ADD, SUB, AND, OR, etc.)
+        case 0x33:  // R-type (ADD)
             regWrite = true;
             aluSrc = false;
             memRead = false;

@@ -1,6 +1,6 @@
 #include "control.hpp"
 #include <iostream>
-
+using namespace std;
 Control::Control() {
     // Initialize all control signals to 0 (safe defaults)
     regWrite = false;
@@ -20,16 +20,17 @@ void Control::setControl(uint32_t opcode) {
             memRead = false;
             memWrite = false;
             memToReg = false;
-            aluOp = 2;
+            aluOp = 0;
             break;
 
         case 0x13:  // I-type (ADDI, ANDI, ORI, etc.)
+            cout<<"addi instr correctly recognised"<<endl;
             regWrite = true;
             aluSrc = true;
             memRead = false;
             memWrite = false;
             memToReg = false;
-            aluOp = 2;
+            aluOp = 0;
             break;
 
         case 0x03:  // Load (LW)

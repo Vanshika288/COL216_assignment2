@@ -16,6 +16,7 @@ using namespace std;
 struct IF_ID {
     uint32_t instruction = 0;
     uint32_t pc = 0;
+    bool free_latch = false;
 };
 
 struct ID_EX {
@@ -26,13 +27,15 @@ struct ID_EX {
     uint32_t opcode = 0;
     uint32_t data1 = 0, data2 = 0;
     Control control;
+    bool no_op = true;
 };
 
 struct EX_MEM {
     uint32_t aluResult = 0;
     uint32_t rd = 0;
-    uint32_t data2 = 0;
+    uint32_t data2 = 0;  //in store word the register from which we take value 
     Control control;
+    bool no_op = true;
 };
 
 struct MEM_WB {
@@ -40,6 +43,7 @@ struct MEM_WB {
     uint32_t aluResult = 0;
     uint32_t rd = 0;
     Control control;
+    bool no_op = true;
 };
 
 class Pipeline {
@@ -60,17 +64,24 @@ private:
     bool forwardingEnabled = false;
 
     uint32_t signExtend(uint32_t instruction);
+    bool ID_stall = false;
+    vector<long long int> instr_fetch;
+    vector<long long int> instr_decode;
+    vector<long long int> instr_execute;
+    vector<long long int> instr_memory;
+    vector<long long int> instr_write;
 
 public:
     Pipeline(bool enableForwarding);
     void loadInstructions(string filename);
+    void load_string_instructions(string filename);
     void runPipeline(int cycles);
-    void IF_stage();
-    void ID_stage();
-    void EX_stage();
-    void MEM_stage();
-    void WB_stage();
-    void printPipeline(int cycle);
+    void IF_stage(int cycle);
+    void ID_stage(int cycle);
+    void EX_stage(int cycle);
+    void MEM_stage(int cycle);
+    void WB_stage(int cycle);
+    void printPipeline();
     void dumpRegisters();
 };
 

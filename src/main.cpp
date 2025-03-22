@@ -52,16 +52,18 @@ int main(int argc, char* argv[]) {
 
     // Load instructions into the pipeline
     // pipeline.loadInstructions(instructions);
-    pipeline.loadInstructions(filename);
-
+    pipeline.loadInstructions("inst.txt");
+    pipeline.load_string_instructions("stringinst.txt");
     // Run the pipeline for the given number of cycles
-    for (int i = 0; i < cycleCount; ++i) {
-        pipeline.runPipeline(i + 1);
-    }
+    // for (int i = 0; i < cycleCount; ++i) {
+    //     pipeline.runPipeline(i + 1);
+    // }
 
+    pipeline.runPipeline(cycleCount);
     // Print the final state of registers
     std::cout << "\nFinal state of registers:\n";
     pipeline.dumpRegisters();
-
+    // for (int i=0;i<pipeline) 
+    pipeline.printPipeline();
     return 0;
 }

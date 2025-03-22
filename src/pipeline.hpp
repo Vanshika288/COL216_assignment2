@@ -5,12 +5,17 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <map>
+#include<algorithm>
+#include<cctype>
 #include <unordered_map>
 #include "control.hpp"
 #include "registers.hpp"
 #include "alu.hpp"
 
 using namespace std;
+
+std::string trim(const std::string& s);
 
 // Pipeline register structure for each stage
 struct IF_ID {
@@ -21,6 +26,7 @@ struct IF_ID {
 
 struct ID_EX {
     uint32_t pc = 0;
+    uint32_t pc_new = 0;
     uint32_t rs1 = 0, rs2 = 0, rd = 0;
     uint32_t imm = 0;
     uint32_t func3 = 0, func7 = 0;
@@ -31,6 +37,7 @@ struct ID_EX {
 };
 
 struct EX_MEM {
+    uint32_t pc = 0;
     uint32_t aluResult = 0;
     uint32_t rd = 0;
     uint32_t data2 = 0;  //in store word the register from which we take value 
@@ -39,6 +46,7 @@ struct EX_MEM {
 };
 
 struct MEM_WB {
+    uint32_t pc = 0;
     uint32_t memData = 0;
     uint32_t aluResult = 0;
     uint32_t rd = 0;
@@ -70,6 +78,8 @@ private:
     vector<long long int> instr_execute;
     vector<long long int> instr_memory;
     vector<long long int> instr_write;
+
+    map<int,vector<pair<string,int>>>table;
 
 public:
     Pipeline(bool enableForwarding);

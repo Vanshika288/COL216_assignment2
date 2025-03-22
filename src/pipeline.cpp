@@ -383,6 +383,9 @@ void Pipeline::EX_stage(int cycle)
     // Perform ALU operation based on control signals
     cout << "some execution occurs" << endl;
     alu.execute(id_ex.control.aluOp, id_ex.data1, id_ex.control.aluSrc ? id_ex.imm : id_ex.data2);
+    if (id_ex.opcode==0x6F || id_ex.opcode==0x67){
+        alu.result = id_ex.pc + 4;
+    }
     ex_mem.aluResult = alu.result;
     cout << ex_mem.aluResult << endl;
     // Pass data and control to next stage
@@ -459,6 +462,7 @@ void Pipeline::WB_stage(int cycle)
         else
         {
             cout << "write_here from reg" << endl;
+            
             reg.write(mem_wb.rd, mem_wb.aluResult);
         }
     }

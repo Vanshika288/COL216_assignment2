@@ -68,6 +68,16 @@ void Control::setControl(uint32_t opcode) {
             memToReg = false;
             aluOp = 3;
             break;
+        case 0x67:  // JALR 
+            regWrite = true;
+            aluSrc = false;
+            memRead = false;
+            memWrite = false;
+            memToReg = false;
+            aluOp = 3;
+            break;
+        
+
 
         default:
             std::cerr << "Warning: Unknown opcode 0x" << std::hex << opcode << std::endl;

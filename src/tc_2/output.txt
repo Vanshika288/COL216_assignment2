@@ -11,7 +11,6 @@ ex_stage id_stage
 id_Stage no stall
 fetches from prev latch
 addi instr. recognised 
-0 0 4
 addi instr correctly recognised
 print0 0
 no stalling
@@ -27,9 +26,9 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 addi instr. recognised 
-0 0 10
 addi instr correctly recognised
 print10 0
+no stalling
 if_stage latch is empty and free
 inst.fetch occurs
 6628387 8
@@ -43,7 +42,6 @@ when it returns zero as alu result : reg value 6
 id_stage
 id_Stage no stall
 fetches from prev latch
-0 0 8
 print6 10
 if_stage latch is empty and free
 inst.fetch occurs
@@ -75,7 +73,6 @@ when it returns zero as alu result : reg value 6
 id_stage
 id_Stage no stall
 fetches from prev latch
-4 10 8
 print6 0
 no stalling
 if_stage latch is empty and free
@@ -94,7 +91,6 @@ fetches from prev latch
 it's add instr
 intruction5407667
 register values of add instr : 5 5 7
-0 0 0
 print5 6
 if_stage latch is empty and free
 inst.fetch occurs
@@ -126,7 +122,6 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 addi instr. recognised 
-0 10 1
 addi instr correctly recognised
 print7 0
 if_stage latch is empty and free
@@ -157,7 +152,6 @@ when it returns zero as alu result : reg value 8
 id_stage
 id_Stage no stall
 fetches from prev latch
-4 0 12
 print8 0
 if_stage latch is empty and free
 inst.fetch occurs
@@ -187,7 +181,6 @@ when it returns zero as alu result : reg value 8
 id_stage
 id_Stage no stall
 fetches from prev latch
-4 21 12
 print8 0
 no stalling
 if_stage latch is empty and free
@@ -206,7 +199,6 @@ fetches from prev latch
 it's add instr
 intruction6587827
 register values of add instr : 9 6 11
-0 10 0
 print9 8
 if_stage latch is empty and free
 inst.fetch occurs
@@ -237,8 +229,8 @@ when it returns zero as alu result : reg value 11
 id_stage
 id_Stage no stall
 fetches from prev latch
-4 21 8
 print11 0
+no stalling
 if_stage latch is empty and free
 inst.fetch occurs
 5576291 40
@@ -252,8 +244,8 @@ when it returns zero as alu result : reg value 11
 id_stage
 id_Stage no stall
 fetches from prev latch
-4 10 12
 print11 11
+no stalling
 if_stage latch is empty and free
 inst.fetch occurs
 16777455 44
@@ -282,7 +274,6 @@ fetches from prev latch
 it's add instr
 intruction10650419
 register values of add instr : 5 10 6
-10 4 0
 print0 11
 no stalling
 if_stage latch is empty and free
@@ -297,7 +288,6 @@ when it returns zero as alu result : reg value 6
 id_stage
 id_Stage no stall
 fetches from prev latch
-10 4 0
 print6 0
 if_stage latch is empty and free
 inst.fetch occurs
@@ -328,9 +318,9 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 addi instr. recognised 
-10 4 1
 addi instr correctly recognised
 print6 0
+no stalling
 if_stage latch is empty and free
 inst.fetch occurs
 4280283247 64
@@ -344,7 +334,6 @@ when it returns zero as alu result : reg value 5
 id_stage
 id_Stage no stall
 fetches from prev latch
-10 4 4294967280
 print5 6
 if_stage latch is empty and free
 wb_stage 
@@ -383,7 +372,6 @@ no mem op
 ex_stage id_stage
 id_Stage no stall
 fetches from prev latch
-0 0 0
 print0 0
 no stalling
 if_stage latch is empty and free
@@ -409,7 +397,6 @@ ex_stage id_stage
 id_Stage no stall
 fetches from prev latch
 addi instr. recognised 
-0 0 4
 addi instr correctly recognised
 print0 0
 no stalling
@@ -427,9 +414,9 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 addi instr. recognised 
-0 0 10
 addi instr correctly recognised
 print10 0
+no stalling
 if_stage latch is empty and free
 inst.fetch occurs
 6628387 8
@@ -443,7 +430,6 @@ when it returns zero as alu result : reg value 6
 id_stage
 id_Stage no stall
 fetches from prev latch
-4 0 8
 print6 10
 if_stage latch is empty and free
 inst.fetch occurs
@@ -475,7 +461,6 @@ when it returns zero as alu result : reg value 6
 id_stage
 id_Stage no stall
 fetches from prev latch
-4 10 8
 print6 0
 no stalling
 if_stage latch is empty and free
@@ -494,7 +479,6 @@ fetches from prev latch
 it's add instr
 intruction5407667
 register values of add instr : 5 5 7
-11 11 0
 print5 6
 if_stage latch is empty and free
 inst.fetch occurs
@@ -526,7 +510,6 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 addi instr. recognised 
-20 10 1
 addi instr correctly recognised
 print7 0
 if_stage latch is empty and free
@@ -557,7 +540,6 @@ when it returns zero as alu result : reg value 8
 id_stage
 id_Stage no stall
 fetches from prev latch
-4 21 12
 print8 0
 if_stage latch is empty and free
 inst.fetch occurs
@@ -587,7 +569,6 @@ when it returns zero as alu result : reg value 8
 id_stage
 id_Stage no stall
 fetches from prev latch
-4 21 12
 print8 0
 no stalling
 if_stage latch is empty and free

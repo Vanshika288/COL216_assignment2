@@ -235,7 +235,7 @@ void Pipeline::ID_stage(int cycle)
 
         // Sign-extend immediate (depends on opcode)
         id_ex.imm = signExtend(if_id.instruction);
-        cout << id_ex.data1 << " " << id_ex.data2 << " " << id_ex.imm << endl;
+        // cout << id_ex.data1 << " " << id_ex.data2 << " " << id_ex.imm << endl;
         // Set control signals
         controlUnit.setControl(id_ex.opcode);
         id_ex.control = controlUnit;
@@ -285,21 +285,15 @@ void Pipeline::ID_stage(int cycle)
         earlier_stall = true;
     }
     cout << "print" << ex_mem.rd << " " << mem_wb.rd << endl;
-    if (ex_mem.rd != 0 && ex_mem.control.regWrite)
+    if (ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs1 || ex_mem.rd == id_ex.rs2))
     {
-        if (ex_mem.rd == id_ex.rs1 || ex_mem.rd == id_ex.rs2)
-        {
             ID_stall = true;
-            id_ex.no_op = true;
-        }
+            id_ex.no_op = true;   
     }
-    else if (mem_wb.rd != 0 && mem_wb.control.regWrite)
+    else if (mem_wb.rd != 0 && mem_wb.control.regWrite && (mem_wb.rd == id_ex.rs1 || mem_wb.rd == id_ex.rs2))
     {
-        if (mem_wb.rd == id_ex.rs1 || mem_wb.rd == id_ex.rs2)
-        {
             ID_stall = true;
             id_ex.no_op = true;
-        }
     }
     else
     {

@@ -6,8 +6,8 @@
 #include <vector>
 #include <string>
 #include <map>
-#include<algorithm>
-#include<cctype>
+#include <algorithm>
+#include <cctype>
 #include <unordered_map>
 #include "control.hpp"
 #include "registers.hpp"
@@ -73,11 +73,11 @@ private:
 
     uint32_t signExtend(uint32_t instruction);
     bool ID_stall = false;
-    vector<long long int> instr_fetch;
-    vector<long long int> instr_decode;
-    vector<long long int> instr_execute;
-    vector<long long int> instr_memory;
-    vector<long long int> instr_write;
+    // vector<long long int> instr_fetch;
+    // vector<long long int> instr_decode;
+    // vector<long long int> instr_execute;
+    // vector<long long int> instr_memory;
+    // vector<long long int> instr_write;
 
     map<int,vector<pair<string,int>>>table;
 

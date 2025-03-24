@@ -90,7 +90,7 @@ void Pipeline::IF_stage(int cycle)
         cout << if_id.instruction << " " << pc << endl;
         if_id.pc = pc;
         pc += 4;
-        instr_fetch.push_back(cycle);
+        // instr_fetch.push_back(cycle);
         table[(if_id.pc) / 4].push_back({"IF", cycle});
     }
     else
@@ -137,7 +137,7 @@ void Pipeline::ID_stage(int cycle)
             id_ex.imm =0;
             id_ex.func3 = 0;
             id_ex.func7 = 0;
-            id_ex.opcode = 0 ;
+            id_ex.opcode = 0;
             id_ex.data1 = 0;
             id_ex.data2 = 0;
             return;
@@ -230,8 +230,8 @@ void Pipeline::ID_stage(int cycle)
         }
 
         // Load data from registers
-        id_ex.data1 = reg.read(id_ex.rs1);
-        id_ex.data2 = reg.read(id_ex.rs2);
+        // id_ex.data1 = reg.read(id_ex.rs1);
+        // id_ex.data2 = reg.read(id_ex.rs2);
 
         // Sign-extend immediate (depends on opcode)
         id_ex.imm = signExtend(if_id.instruction);
@@ -240,44 +240,44 @@ void Pipeline::ID_stage(int cycle)
         controlUnit.setControl(id_ex.opcode);
         id_ex.control = controlUnit;
 
-        if (id_ex.opcode == 0x67)
-        {
-            // jalr type
-            id_ex.pc_new = reg.read(id_ex.rs1) + id_ex.imm;
-        }
-        if (id_ex.opcode == 0x6F)
-        {
-
-            id_ex.pc_new = id_ex.pc + id_ex.imm;
-        }
-        if (id_ex.opcode == 0x63)
-        {
-            int val1 = reg.read(id_ex.rs1);
-            int val2 = reg.read(id_ex.rs2);
-            if (id_ex.func3 == 1)
-            {
-                // bne
-                if (val1 != val2)
-                {
-                    id_ex.pc_new = id_ex.pc + id_ex.imm;
-                }
-                else
-                {
-                    id_ex.pc_new = id_ex.pc + 4;
-                }
-            }
-            else if (id_ex.func3 == 0)
-            {
-                if (val1 == val2)
-                {
-                    id_ex.pc_new = id_ex.pc + id_ex.imm;
-                }
-                else
-                {
-                    id_ex.pc_new = id_ex.pc + 4;
-                }
-            }
-        }
+        // if (id_ex.opcode == 0x67)
+        // {
+        //     // jalr type
+        //     id_ex.pc_new = reg.read(id_ex.rs1) + id_ex.imm;
+        // }
+        // else if (id_ex.opcode == 0x6F)
+        // {
+        //     // jal type
+        //     id_ex.pc_new = id_ex.pc + id_ex.imm;
+        // }
+        // else if (id_ex.opcode == 0x63)
+        // {
+        //     int val1 = reg.read(id_ex.rs1);
+        //     int val2 = reg.read(id_ex.rs2);
+        //     if (id_ex.func3 == 1)
+        //     {
+        //         // bne
+        //         if (val1 != val2)
+        //         {
+        //             id_ex.pc_new = id_ex.pc + id_ex.imm;
+        //         }
+        //         else
+        //         {
+        //             id_ex.pc_new = id_ex.pc + 4;
+        //         }
+        //     }
+        //     else if (id_ex.func3 == 0)
+        //     {
+        //         if (val1 == val2)
+        //         {
+        //             id_ex.pc_new = id_ex.pc + id_ex.imm;
+        //         }
+        //         else
+        //         {
+        //             id_ex.pc_new = id_ex.pc + 4;
+        //         }
+        //     }
+        // }
     }
     else
     {
@@ -349,7 +349,7 @@ void Pipeline::ID_stage(int cycle)
     }
     if (!(earlier_stall))
     {
-        instr_decode.push_back(cycle);
+        // instr_decode.push_back(cycle);
         table[(id_ex.pc) / 4].push_back({"ID", cycle});
     }
     if (earlier_stall)
@@ -394,7 +394,7 @@ void Pipeline::EX_stage(int cycle)
     ex_mem.data2 = id_ex.data2;
     ex_mem.control = id_ex.control;
     ex_mem.no_op = false;
-    instr_execute.push_back(cycle);
+    // instr_execute.push_back(cycle);
     ex_mem.pc = id_ex.pc;
     table[(ex_mem.pc) / 4].push_back({"EX", cycle});
 }
@@ -436,7 +436,7 @@ void Pipeline::MEM_stage(int cycle)
     mem_wb.control = ex_mem.control;
     cout << mem_wb.aluResult << " " << mem_wb.rd << " " << endl;
     mem_wb.no_op = false;
-    instr_memory.push_back(cycle);
+    // instr_memory.push_back(cycle);
     mem_wb.pc = ex_mem.pc;
     table[(mem_wb.pc) / 4].push_back({"DM", cycle});
 }
@@ -470,7 +470,7 @@ void Pipeline::WB_stage(int cycle)
     {
         cout << "not to be written" << endl;
     }
-    instr_write.push_back(cycle);
+    // instr_write.push_back(cycle);
     table[(mem_wb.pc) / 4].push_back({"WB", cycle});
 }
 

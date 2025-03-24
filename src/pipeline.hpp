@@ -25,6 +25,9 @@ struct IF_ID {
 };
 
 struct ID_EX {
+    bool mem_forward = false;
+    uint8_t forwardA = 0;
+    uint8_t forwardB = 0;
     uint32_t pc = 0;
     uint32_t pc_new = 0;
     uint32_t rs1 = 0, rs2 = 0, rd = 0;
@@ -37,6 +40,8 @@ struct ID_EX {
 };
 
 struct EX_MEM {
+    uint32_t opcode = 0;
+    bool mem_forward = false; 
     uint32_t pc = 0;
     uint32_t aluResult = 0;
     uint32_t rd = 0;
@@ -46,6 +51,7 @@ struct EX_MEM {
 };
 
 struct MEM_WB {
+    uint32_t opcode = 0;
     uint32_t pc = 0;
     uint32_t memData = 0;
     uint32_t aluResult = 0;

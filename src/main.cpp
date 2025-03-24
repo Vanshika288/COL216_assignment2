@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
     separate_columns(filename);
 
     // Instantiate Pipeline
-    bool forwardingEnabled = (std::string(argv[0]).find("forward") != std::string::npos);
+    bool forwardingEnabled = (std::string(argv[0]) == "./forward");
     Pipeline pipeline(forwardingEnabled);
 
     // Load instructions into the pipeline
@@ -76,7 +76,7 @@ int main(int argc, char* argv[]) {
 
     // Run the pipeline for the given number of cycles
     pipeline.runPipeline(cycleCount);
-    
+
     // Print the final state of registers
     std::cout << "\nFinal state of registers:\n";
     pipeline.dumpRegisters();

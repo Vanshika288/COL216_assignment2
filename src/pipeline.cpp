@@ -428,7 +428,7 @@ void Pipeline::ID_stage(int cycle)
             id_ex.no_op = true;
             //}
         }
-        if (ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs1 || ex_mem.rd == id_ex.rs2))
+        else if (ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs1 || ex_mem.rd == id_ex.rs2))
         {
             // if (forwardingEnabled)
             // {

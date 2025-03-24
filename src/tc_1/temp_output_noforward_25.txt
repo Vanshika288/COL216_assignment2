@@ -1,3 +1,5 @@
+forwardingEnabled: 0
+forwardingEnabled: 0
 wb_stage 
 mem_stage 
 ex_stage id_stage
@@ -16,7 +18,7 @@ print0 0
 no stalling
 if_stage latch is empty and free
 inst.fetch occurs
-10486547 4
+10486547 4  // second instr. fetch 
 wb_stage 
 mem_stage 
 ex_stage some execution occurs
@@ -40,7 +42,7 @@ ex_stage some execution occurs
 10
 when it returns zero as alu result : reg value 6
 id_stage
-id_Stage no stall
+id_Stage no stall   // did not go to no stalling
 fetches from prev latch
 print6 10
 if_stage latch is empty and free
@@ -52,20 +54,15 @@ write_here from reg
 mem_stage 
 no mem op
 10 6 
-ex_stage id_stage
+ex_stage  // first stall of SW
+ id_stage
 does not fetch from prev latch
 print0 6
+no stalling
 earlier stall and free _latch set to false
 if_stage wb_stage 
 to be written
 write_here from reg
-mem_stage 
-ex_stage id_stage
-does not fetch from prev latch
-print0 0
-no stalling
-earlier stall and free _latch set to false
-if_stage wb_stage 
 mem_stage 
 ex_stage some execution occurs
 12
@@ -103,20 +100,14 @@ to be read from mem
 ex_stage id_stage
 does not fetch from prev latch
 print0 5
+no stalling
 earlier stall and free _latch set to false
 if_stage wb_stage 
 to be written
 write_here from mem
 mem_stage 
-ex_stage id_stage
-does not fetch from prev latch
-print0 0
-no stalling
-earlier stall and free _latch set to false
-if_stage wb_stage 
-mem_stage 
 ex_stage some execution occurs
-20
+0
 when it returns zero as alu result : reg value 7
 id_stage
 id_Stage no stall
@@ -130,24 +121,18 @@ inst.fetch occurs
 wb_stage 
 mem_stage 
 no mem op
-20 7 
+0 7 
 ex_stage id_stage
 does not fetch from prev latch
 print0 7
+no stalling
 earlier stall and free _latch set to false
 if_stage wb_stage 
 to be written
 write_here from reg
 mem_stage 
-ex_stage id_stage
-does not fetch from prev latch
-print0 0
-no stalling
-earlier stall and free _latch set to false
-if_stage wb_stage 
-mem_stage 
 ex_stage some execution occurs
-21
+1
 when it returns zero as alu result : reg value 8
 id_stage
 id_Stage no stall
@@ -159,21 +144,15 @@ inst.fetch occurs
 wb_stage 
 mem_stage 
 no mem op
-21 8 
+1 8 
 ex_stage id_stage
 does not fetch from prev latch
 print0 8
+no stalling
 earlier stall and free _latch set to false
 if_stage wb_stage 
 to be written
 write_here from reg
-mem_stage 
-ex_stage id_stage
-does not fetch from prev latch
-print0 0
-no stalling
-earlier stall and free _latch set to false
-if_stage wb_stage 
 mem_stage 
 ex_stage some execution occurs
 16
@@ -209,20 +188,14 @@ to be read from mem
 ex_stage id_stage
 does not fetch from prev latch
 print0 9
+no stalling
 earlier stall and free _latch set to false
 if_stage wb_stage 
 to be written
 write_here from mem
 mem_stage 
-ex_stage id_stage
-does not fetch from prev latch
-print0 0
-no stalling
-earlier stall and free _latch set to false
-if_stage wb_stage 
-mem_stage 
 ex_stage some execution occurs
-31
+10
 when it returns zero as alu result : reg value 11
 id_stage
 id_Stage no stall
@@ -230,7 +203,7 @@ if_stage latch is empty and free
 wb_stage 
 mem_stage 
 no mem op
-31 11 
+10 11 
 ex_stage id_stage
 id_Stage no stall
 if_stage latch is empty and free
@@ -251,22 +224,47 @@ mem_stage
 ex_stage id_stage
 id_Stage no stall
 if_stage latch is empty and free
+wb_stage 
+mem_stage 
+ex_stage id_stage
+id_Stage no stall
+if_stage latch is empty and free
+wb_stage 
+mem_stage 
+ex_stage id_stage
+id_Stage no stall
+if_stage latch is empty and free
+wb_stage 
+mem_stage 
+ex_stage id_stage
+id_Stage no stall
+if_stage latch is empty and free
+wb_stage 
+mem_stage 
+ex_stage id_stage
+id_Stage no stall
+if_stage latch is empty and free
+wb_stage 
+mem_stage 
+ex_stage id_stage
+id_Stage no stall
+if_stage latch is empty and free
 
 Final state of registers:
 x 0:        0	x 1:        0	x 2:        0	x 3:        0
-x 4:        0	x 5:       10	x 6:       10	x 7:       20
-x 8:       21	x 9:       21	x10:        4	x11:       31
+x 4:        0	x 5:        0	x 6:       10	x 7:        0
+x 8:        1	x 9:        0	x10:        4	x11:       10
 x12:        0	x13:        0	x14:        0	x15:        0
 x16:        0	x17:        0	x18:        0	x19:        0
 x20:        0	x21:        0	x22:        0	x23:        0
 x24:        0	x25:        0	x26:        0	x27:        0
 x28:        0	x29:        0	x30:        0	x31:        0
-addi x10 x0 4       |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-addi x6 x0 10       |-   |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-sw x6 8 x10         |-   |    |IF  |ID  |-   |    |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |
-lw x5 8 x10         |-   |    |    |IF  |-   |    |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |
-add x7 x5 x5        |-   |    |    |    |    |    |IF  |ID  |-   |    |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |
-addi x8 x7 1        |-   |    |    |    |    |    |    |IF  |-   |    |ID  |-   |    |EX  |DM  |WB  |-   |    |    |    |    |    |    |
-sw x8 12 x10        |-   |    |    |    |    |    |    |    |    |    |IF  |-   |    |ID  |-   |    |EX  |DM  |WB  |-   |    |    |    |
-lw x9 12 x10        |-   |    |    |    |    |    |    |    |    |    |    |    |    |IF  |-   |    |ID  |EX  |DM  |WB  |-   |    |    |
-add x11 x9 x6       |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |-   |    |EX  |DM  |WB  |
+addi x10 x0 4       |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |
+addi x6 x0 10       |-   |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |
+sw x6 8 x10         |-   |    |IF  |ID  |-   |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |
+lw x5 8 x10         |-   |    |    |IF  |-   |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |
+add x7 x5 x5        |-   |    |    |    |    |IF  |ID  |-   |EX  |DM  |WB  |-   |    |    |    |    |    |    |
+addi x8 x7 1        |-   |    |    |    |    |    |IF  |-   |ID  |-   |EX  |DM  |WB  |-   |    |    |    |    |
+sw x8 12 x10        |-   |    |    |    |    |    |    |    |IF  |-   |ID  |-   |EX  |DM  |WB  |-   |    |    |
+lw x9 12 x10        |-   |    |    |    |    |    |    |    |    |    |IF  |-   |ID  |EX  |DM  |WB  |-   |    |
+add x11 x9 x6       |-   |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |-   |EX  |DM  |WB  |

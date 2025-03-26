@@ -1,0 +1,15 @@
+addi x5 x0 0   ;IF  ;ID  ;EX  ;MEM ;WB  ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    
+bge x5 x12 32  ;    ;IF  ;ID  ;-   ;-   ;EX  ;MEM ;WB  ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;IF  ;ID  ;EX  ;MEM ;WB  ;    ;    
+add x6 x11 x5  ;    ;    ;IF  ;-   ;-   ;ID  ;EX  ;MEM ;WB  ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;IF  ;ID  ;EX  ;MEM ;WB  ;    
+lb x6 0 x6     ;    ;    ;    ;    ;    ;IF  ;ID  ;-   ;-   ;EX  ;MEM ;WB  ;    ;    ;    ;    ;    ;    ;    ;    ;IF  ;ID  ;-   ;-   ;EX  
+beq x6 x0 20   ;    ;    ;    ;    ;    ;    ;IF  ;-   ;-   ;ID  ;-   ;-   ;EX  ;MEM ;WB  ;    ;    ;    ;    ;    ;    ;IF  ;-   ;-   ;ID  
+add x7 x10 x5  ;    ;    ;    ;    ;    ;    ;    ;    ;    ;IF  ;-   ;-   ;ID  ;EX  ;MEM ;WB  ;    ;    ;    ;    ;    ;    ;    ;    ;IF  
+sb x6 0 x7     ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;IF  ;ID  ;-   ;-   ;EX  ;MEM ;WB  ;    ;    ;    ;    ;    ;    
+addi x5 x5 1   ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;IF  ;-   ;-   ;ID  ;EX  ;MEM ;WB  ;    ;    ;    ;    ;    
+jal x0 -28     ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;IF  ;ID  ;EX  ;MEM ;WB  ;    ;    ;    ;    
+bge x5 x12 20  ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;IF  ;    ;    ;    ;    ;    ;    ;    
+add x6 x10 x5  ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    
+sb x0 0 x6     ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    
+addi x5 x5 1   ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    
+jal x0 -16     ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    
+jalr x0 x1 0   ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    ;    

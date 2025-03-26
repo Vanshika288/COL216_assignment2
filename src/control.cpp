@@ -77,7 +77,14 @@ void Control::setControl(uint32_t opcode) {
             aluOp = 3;
             break;
         
-
+        case 0x17 :
+            regWrite = true;
+            aluSrc = false;
+            memRead = false;
+            memWrite = false;
+            memToReg = false;
+            aluOp = 0;
+            break;
 
         default:
             std::cerr << "Warning: Unknown opcode 0x" << std::hex << opcode << std::endl;

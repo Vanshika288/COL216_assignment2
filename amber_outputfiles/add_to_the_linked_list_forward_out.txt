@@ -1,0 +1,3 @@
+sd x10 8 x11    ;IF  ;ID  ;EX  ;MEM ;WB  ;    ;    ;    
+addi x10 x11 0  ;    ;IF  ;ID  ;EX  ;MEM ;WB  ;    ;    
+jalr x0 x1 0    ;    ;    ;IF  ;ID  ;EX  ;MEM ;WB  ;    

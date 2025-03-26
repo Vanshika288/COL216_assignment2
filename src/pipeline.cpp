@@ -198,7 +198,7 @@ void Pipeline::ID_stage(int cycle)
                 id_ex.imm |= 0xFFFFF000;
             break;
 
-        case 0x63: // bne beq  // SB type
+        case 0x63: // bne beq bge blt  // SB type
             id_ex.rs1 = (if_id.instruction >> 15) & 0x1F;
             id_ex.rs2 = (if_id.instruction >> 20) & 0x1F;
             id_ex.func3 = (if_id.instruction >> 12) & 0x7;
@@ -219,7 +219,13 @@ void Pipeline::ID_stage(int cycle)
             if (if_id.instruction & 0x80000000)
                 id_ex.imm |= 0xFFE00000;
             break;
-
+        case 0x17: // U-type (AUIPC)
+            cout << "AUIPC instruction recognised" << endl;
+            id_ex.rd = (if_id.instruction >> 7) & 0x1F;
+            id_ex.imm = if_id.instruction & 0xFFFFF000; // Upper 20 bits
+            // No sign extension required
+            cout << "AUIPC rd: " << id_ex.rd << ", imm: " << id_ex.imm << endl;
+            break;
             // case U_TYPE_OPCODE:  // Replace with actual U-type opcode //for lui type
             //     id_ex.rd = (if_id.instruction >> 7) & 0x1F;
             //     id_ex.imm = if_id.instruction & 0xFFFFF000;  // Upper 20 bits
@@ -235,7 +241,9 @@ void Pipeline::ID_stage(int cycle)
         // id_ex.data2 = reg.read(id_ex.rs2);
 
         // Sign-extend immediate (depends on opcode)
-        id_ex.imm = signExtend(if_id.instruction);
+        if (id_ex.opcode != 0x17){
+            id_ex.imm = signExtend(if_id.instruction);
+        }
         // cout << id_ex.data1 << " " << id_ex.data2 << " " << id_ex.imm << endl;
         // Set control signals
         controlUnit.setControl(id_ex.opcode);
@@ -293,116 +301,126 @@ void Pipeline::ID_stage(int cycle)
         id_ex.data1 = reg.read(id_ex.rs1);
         id_ex.data2 = reg.read(id_ex.rs2);
 
-        if (id_ex.opcode == 0x63 || id_ex.opcode == 0x67 || id_ex.opcode == 0x6F ){
-            if (ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs1 || ex_mem.rd == id_ex.rs2)) {
+        if (id_ex.opcode == 0x63 || id_ex.opcode == 0x67 || id_ex.opcode == 0x6F)
+        {
+            if (ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs1 || ex_mem.rd == id_ex.rs2))
+            {
                 ID_stall = true;
                 id_ex.no_op = true;
                 id_ex.forwardA = 0;
                 id_ex.forwardB = 0;
                 id_ex.mem_forward = false;
             }
-            else if (mem_wb.rd !=0 && mem_wb.control.regWrite && (mem_wb.rd == id_ex.rs1 || mem_wb.rd == id_ex.rs2)){
-                if (mem_wb.opcode == 0x03){
+            else if (mem_wb.rd != 0 && mem_wb.control.regWrite && (mem_wb.rd == id_ex.rs1 || mem_wb.rd == id_ex.rs2))
+            {
+                if (mem_wb.opcode == 0x03)
+                {
                     ID_stall = true;
                     id_ex.no_op = true;
                     id_ex.forwardA = 0;
                     id_ex.forwardB = 0;
                     id_ex.mem_forward = false;
                 }
-                else {
-                    if (id_ex.rs1 == mem_wb.rd){
+                else
+                {
+                    if (id_ex.rs1 == mem_wb.rd)
+                    {
                         id_ex.data1 = mem_wb.aluResult;
                     }
-                    if (id_ex.rs2 == mem_wb.rd){
+                    if (id_ex.rs2 == mem_wb.rd)
+                    {
                         id_ex.data2 = mem_wb.aluResult;
                     }
                 }
             }
         }
-        if (previous_opcode == 0x03)
-        {
-            
-            if (id_ex.opcode != 0x23 && ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs1 || ex_mem.rd == id_ex.rs2))
-            {
-                ID_stall = true;
-                id_ex.no_op = true;
-                id_ex.forwardA = 0;
-                id_ex.forwardB = 0;
-                id_ex.mem_forward = false;
-            }
-            else if (id_ex.opcode == 0x23 && ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs1))
-            {
-                ID_stall = true;
-                id_ex.no_op = true;
-                id_ex.forwardA = 0;
-                id_ex.forwardB = 0;
-                id_ex.mem_forward = false;
-            }
-            else if (id_ex.opcode == 0x23 && ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs2))
-            {
-                ID_stall = false;
-                id_ex.no_op = false;
-                id_ex.forwardA = 0;
-                id_ex.forwardB = 0;
-                id_ex.mem_forward = true;
-            }
-            else
-            {
-                ID_stall = false;
-                id_ex.no_op = false;
-                id_ex.forwardA = 0;
-                id_ex.forwardB = 0;
-                id_ex.mem_forward = false;
-            }
-        }
         else
         {
-            if (ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs1 && ex_mem.rd == id_ex.rs2))
+            if (previous_opcode == 0x03)
             {
-                ID_stall = false;
-                id_ex.no_op = false;
-                id_ex.forwardA = 2;
-                id_ex.forwardB = 2;
-                id_ex.mem_forward = false;
-            }
-            else if (ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs2))
-            {
-                ID_stall = false;
-                id_ex.no_op = false;
-                id_ex.forwardA = 0;
-                id_ex.forwardB = 2;
-                id_ex.mem_forward = false;
-            }
-            else if (ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs1))
-            {
-                ID_stall = false;
-                id_ex.no_op = false;
-                id_ex.forwardA = 2;
-                id_ex.forwardB = 0;
-                id_ex.mem_forward = false;
+
+                if (id_ex.opcode != 0x23 && ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs1 || ex_mem.rd == id_ex.rs2))
+                {
+                    ID_stall = true;
+                    id_ex.no_op = true;
+                    id_ex.forwardA = 0;
+                    id_ex.forwardB = 0;
+                    id_ex.mem_forward = false;
+                }
+                else if (id_ex.opcode == 0x23 && ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs1))
+                {
+                    ID_stall = true;
+                    id_ex.no_op = true;
+                    id_ex.forwardA = 0;
+                    id_ex.forwardB = 0;
+                    id_ex.mem_forward = false;
+                }
+                else if (id_ex.opcode == 0x23 && ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs2))
+                {
+                    ID_stall = false;
+                    id_ex.no_op = false;
+                    id_ex.forwardA = 0;
+                    id_ex.forwardB = 0;
+                    id_ex.mem_forward = true;
+                }
+                else
+                {
+                    ID_stall = false;
+                    id_ex.no_op = false;
+                    id_ex.forwardA = 0;
+                    id_ex.forwardB = 0;
+                    id_ex.mem_forward = false;
+                }
             }
             else
             {
+                if (ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs1 && ex_mem.rd == id_ex.rs2))
+                {
+                    ID_stall = false;
+                    id_ex.no_op = false;
+                    id_ex.forwardA = 2;
+                    id_ex.forwardB = 2;
+                    id_ex.mem_forward = false;
+                }
+                else if (ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs2))
+                {
+                    ID_stall = false;
+                    id_ex.no_op = false;
+                    id_ex.forwardA = 0;
+                    id_ex.forwardB = 2;
+                    id_ex.mem_forward = false;
+                }
+                else if (ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs1))
+                {
+                    ID_stall = false;
+                    id_ex.no_op = false;
+                    id_ex.forwardA = 2;
+                    id_ex.forwardB = 0;
+                    id_ex.mem_forward = false;
+                }
+                else
+                {
+                    ID_stall = false;
+                    id_ex.no_op = false;
+                    id_ex.forwardA = 0;
+                    id_ex.forwardB = 0;
+                    id_ex.mem_forward = false;
+                }
+            }
+            if (mem_wb.control.regWrite && mem_wb.rd != 0 && !(ex_mem.control.regWrite && ex_mem.rd != 0 && ex_mem.rd == id_ex.rs1) && mem_wb.rd == id_ex.rs1)
+            {
                 ID_stall = false;
                 id_ex.no_op = false;
-                id_ex.forwardA = 0;
-                id_ex.forwardB = 0;
+                id_ex.forwardA = 1;
                 id_ex.mem_forward = false;
             }
-        }
-        if (mem_wb.control.regWrite && mem_wb.rd != 0 && !(ex_mem.control.regWrite && ex_mem.rd != 0 && ex_mem.rd == id_ex.rs1) && mem_wb.rd == id_ex.rs1)
-        {
-            ID_stall = false;
-            id_ex.no_op = false;
-            id_ex.forwardA = 1;
-            id_ex.mem_forward = false;
-        }
-        if (mem_wb.control.regWrite && mem_wb.rd != 0 && !(ex_mem.control.regWrite && ex_mem.rd != 0 && ex_mem.rd == id_ex.rs2) && mem_wb.rd == id_ex.rs2)
-        {
-            ID_stall = false;
-            id_ex.no_op = false;
-            id_ex.forwardB = 1;
-            id_ex.mem_forward = false;
+            if (mem_wb.control.regWrite && mem_wb.rd != 0 && !(ex_mem.control.regWrite && ex_mem.rd != 0 && ex_mem.rd == id_ex.rs2) && mem_wb.rd == id_ex.rs2)
+            {
+                ID_stall = false;
+                id_ex.no_op = false;
+                id_ex.forwardB = 1;
+                id_ex.mem_forward = false;
+            }
         }
     }
     else
@@ -477,51 +495,68 @@ void Pipeline::ID_stage(int cycle)
             cout << "no stalling" << endl;
             id_ex.data1 = reg.read(id_ex.rs1);
             id_ex.data2 = reg.read(id_ex.rs2);
-            
+
             id_ex.no_op = false;
             ID_stall = false;
         }
     }
 
-    if (!ID_stall){
+    if (!ID_stall)
+    {
         if (id_ex.opcode == 0x67)
-            {
-                // jalr type
-                id_ex.pc_new = id_ex.data1 + id_ex.imm;
-            }
-            if (id_ex.opcode == 0x6F)
-            {
+        {
+            // jalr type
+            id_ex.pc_new = id_ex.data1 + id_ex.imm;
+        }
+        if (id_ex.opcode == 0x6F)
+        {
 
-                id_ex.pc_new = id_ex.pc + id_ex.imm;
-            }
-            if (id_ex.opcode == 0x63)
+            id_ex.pc_new = id_ex.pc + id_ex.imm;
+        }
+        if (id_ex.opcode == 0x63)
+        {
+            int val1 = id_ex.data1;
+            int val2 = id_ex.data2;
+            if (id_ex.func3 == 1)
             {
-                int val1 = id_ex.data1;
-                int val2 = id_ex.data2;
-                if (id_ex.func3 == 1)
+                // bne
+                if (val1 != val2)
                 {
-                    // bne
-                    if (val1 != val2)
-                    {
-                        id_ex.pc_new = id_ex.pc + id_ex.imm;
-                    }
-                    else
-                    {
-                        id_ex.pc_new = id_ex.pc + 4;
-                    }
+                    id_ex.pc_new = id_ex.pc + id_ex.imm;
                 }
-                else if (id_ex.func3 == 0)
+                else
                 {
-                    if (val1 == val2)
-                    {
-                        id_ex.pc_new = id_ex.pc + id_ex.imm;
-                    }
-                    else
-                    {
-                        id_ex.pc_new = id_ex.pc + 4;
-                    }
+                    id_ex.pc_new = id_ex.pc + 4;
                 }
             }
+            else if (id_ex.func3 == 0)
+            {
+                if (val1 == val2)
+                {
+                    id_ex.pc_new = id_ex.pc + id_ex.imm;
+                }
+                else
+                {
+                    id_ex.pc_new = id_ex.pc + 4;
+                }
+            }
+            else if (id_ex.func3 == 4){
+                if (val1 < val2){
+                    id_ex.pc_new = id_ex.pc + id_ex.imm;
+                }
+                else {
+                    id_ex.pc_new = id_ex.pc + 4;
+                }
+            }
+            else if (id_ex.func3 == 5){
+                if (val1 >= val2){
+                    id_ex.pc_new = id_ex.pc + id_ex.imm;
+                }
+                else {
+                    id_ex.pc_new = id_ex.pc + 4;
+                }
+            }
+        }
     }
 
     if (!(earlier_stall))
@@ -559,17 +594,22 @@ void Pipeline::EX_stage(int cycle)
 
     // Perform ALU operation based on control signals
 
-    if (forwardingEnabled){
-        if (id_ex.forwardA == 2){
+    if (forwardingEnabled)
+    {
+        if (id_ex.forwardA == 2)
+        {
             id_ex.data1 = ex_mem.aluResult;
         }
-        else if (id_ex.forwardA == 1){
+        else if (id_ex.forwardA == 1)
+        {
             id_ex.data1 = reg.read(id_ex.rs1);
         }
-        if (id_ex.forwardB == 2){
+        if (id_ex.forwardB == 2)
+        {
             id_ex.data2 = ex_mem.aluResult;
         }
-        else if (id_ex.forwardB == 1){
+        else if (id_ex.forwardB == 1)
+        {
             id_ex.data2 = reg.read(id_ex.rs2);
         }
     }
@@ -579,6 +619,9 @@ void Pipeline::EX_stage(int cycle)
     if (id_ex.opcode == 0x6F || id_ex.opcode == 0x67)
     {
         alu.result = id_ex.pc + 4;
+    }
+    if (id_ex.opcode == 0x17) {
+        alu.result = id_ex.pc + id_ex.imm;
     }
     ex_mem.aluResult = alu.result;
     cout << ex_mem.aluResult << endl;
@@ -608,8 +651,10 @@ void Pipeline::MEM_stage(int cycle)
         mem_wb.rd = 0;
         return;
     }
-    if (forwardingEnabled){
-        if (ex_mem.mem_forward){
+    if (forwardingEnabled)
+    {
+        if (ex_mem.mem_forward)
+        {
             ex_mem.data2 = mem_wb.memData;
         }
     }

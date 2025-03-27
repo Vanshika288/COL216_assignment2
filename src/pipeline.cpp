@@ -810,165 +810,26 @@ string trim(const string &s)
     return (start == string::npos) ? "" : s.substr(start, end - start + 1);
 }
 
+void trimTrailingSemicolons(string &s) {
+    // Remove trailing "; "
+    s.pop_back();  // Remove last character
+    while (s.size() >= 2 && s.substr(s.size() - 2) == "; ") {
+        s.erase(s.size() - 2);  // Erase last 2 characters
+    }
+    // Remove last ';' if present
+    if (!s.empty() && s.back() == ';') {
+        s.pop_back();
+    }
+}
+
 // Print pipeline state in deploy stage
-
-// void Pipeline :: printPipeline(int cycles){
-//     for (int i=0;i<instructions.size();i++){
-//         cout<<trim(instructions[i])<<";";
-//         // int cycle_to_be_printed = 0;
-        
-//         int fetch_index = 0;
-//         int decode_index = 0;
-//         int ex_index = 0;
-//         int mem_index = 0;
-//         int write_index = 0;
-//         for (int j=0;j<cycles;j++){
-//             int instr_printed_in_curr_cycle = 0;
-//             if (instr_fetch[fetch_index].second.first == i){
-//                 if (instr_fetch[fetch_index].first == j){
-//                     if (instr_fetch[fetch_index].second.second == 1){
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             cout<<"IF";
-//                         }
-//                         else {
-//                             cout<<"/IF";
-//                         }
-                        
-//                     }
-//                     else {
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             cout<<"-";
-//                         }
-//                         else {
-//                             cout<<"/-";
-//                         }
-//                     }
-//                     instr_printed_in_curr_cycle++;
-//                     fetch_index++;
-//                 }
-//             }
-//             else {
-//                 fetch_index++;
-//             }
-//             if (instr_decode[decode_index].second.first == i){
-//                 if (instr_decode[decode_index].first == j){
-//                     if (instr_decode[decode_index].second.second == 1){
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             cout<<"ID";
-//                         }
-//                         else {
-//                             cout<<"/ID";
-//                         }
-                        
-//                     }
-//                     else {
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             cout<<"-";
-//                         }
-//                         else {
-//                             cout<<"/-";
-//                         }
-//                     }
-//                     instr_printed_in_curr_cycle++;
-//                     decode_index++;
-//                 }
-//             }
-//             else {
-//                 decode_index++;
-//             }
-//             if (instr_execute[ex_index].second.first == i){
-//                 if (instr_execute[ex_index].first == j){
-//                     if (instr_execute[ex_index].second.second == 1){
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             cout<<"EX";
-//                         }
-//                         else {
-//                             cout<<"/EX";
-//                         }
-                        
-//                     }
-//                     else {
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             cout<<"-";
-//                         }
-//                         else {
-//                             cout<<"/-";
-//                         }
-//                     }
-//                     instr_printed_in_curr_cycle++;
-//                     ex_index++;
-//                 }
-//             }
-//             else {
-//                 ex_index++;
-//             }
-//             if (instr_memory[mem_index].second.first == i){
-//                 if (instr_memory[mem_index].first == j){
-//                     if (instr_memory[mem_index].second.second == 1){
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             cout<<"MEM";
-//                         }
-//                         else {
-//                             cout<<"/MEM";
-//                         }
-                        
-//                     }
-//                     else {
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             cout<<"-";
-//                         }
-//                         else {
-//                             cout<<"/-";
-//                         }
-//                     }
-//                     instr_printed_in_curr_cycle++;
-//                     mem_index++;
-//                 }
-//             }
-//             else {
-//                 mem_index++;
-//             }
-//             if (instr_write[write_index].second.first == i){
-//                 if (instr_write[write_index].first == j){
-//                     if (instr_write[write_index].second.second == 1){
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             cout<<"WB";
-//                         }
-//                         else {
-//                             cout<<"/WB";
-//                         }
-                        
-//                     }
-//                     else {
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             cout<<"-";
-//                         }
-//                         else {
-//                             cout<<"/-";
-//                         }
-//                     }
-//                     instr_printed_in_curr_cycle++;
-//                     write_index++;
-//                 }
-//             }
-//             else {
-//                 write_index++;
-//             }
-//             if (instr_printed_in_curr_cycle==0){
-//                 cout<<" ";
-//             }
-//             cout<<";";
-//         }
-//         cout<<endl;
-//     }
-// }
-
-
-// Print pipeline state in debug stage
 
 void Pipeline :: printPipeline(int cycles){
     for (int i=0;i<instructions.size();i++){
-        cout << left << setw(20) << trim(instructions[i]) << "|";
+        // cout<<trim(instructions[i])<<";";
+        string s = "";
+        s.append(trim(instructions[i]));
+        s.push_back(';');
         // int cycle_to_be_printed = 0;
         
         int fetch_index = 0;
@@ -976,26 +837,29 @@ void Pipeline :: printPipeline(int cycles){
         int ex_index = 0;
         int mem_index = 0;
         int write_index = 0;
-
         for (int j=0;j<cycles;j++){
             int instr_printed_in_curr_cycle = 0;
             if (instr_fetch[fetch_index].second.first == i){
                 if (instr_fetch[fetch_index].first == j){
                     if (instr_fetch[fetch_index].second.second == 1){
                         if (instr_printed_in_curr_cycle == 0){
-                            cout<<"IF  ";
+                            // cout<<"IF";
+                            s.append("IF");
                         }
                         else {
-                            cout<<"/IF ";
+                            // cout<<"/IF";
+                            s.append("/IF");
                         }
                         
                     }
                     else {
                         if (instr_printed_in_curr_cycle == 0){
-                            cout<<"-   ";
+                            // cout<<"-";
+                            s.append("-");
                         }
                         else {
-                            cout<<"/-  ";
+                            // cout<<"/-";
+                            s.append("/-");
                         }
                     }
                     instr_printed_in_curr_cycle++;
@@ -1009,19 +873,23 @@ void Pipeline :: printPipeline(int cycles){
                 if (instr_decode[decode_index].first == j){
                     if (instr_decode[decode_index].second.second == 1){
                         if (instr_printed_in_curr_cycle == 0){
-                            cout<<"ID  ";
+                            // cout<<"ID";
+                            s.append("ID");
                         }
                         else {
-                            cout<<"/ID ";
+                            // cout<<"/ID";
+                            s.append("/ID");
                         }
                         
                     }
                     else {
                         if (instr_printed_in_curr_cycle == 0){
-                            cout<<"-   ";
+                            // cout<<"-";
+                            s.append("-");
                         }
                         else {
-                            cout<<"/-  ";
+                            // cout<<"/-";
+                            s.append("/-");
                         }
                     }
                     instr_printed_in_curr_cycle++;
@@ -1035,19 +903,23 @@ void Pipeline :: printPipeline(int cycles){
                 if (instr_execute[ex_index].first == j){
                     if (instr_execute[ex_index].second.second == 1){
                         if (instr_printed_in_curr_cycle == 0){
-                            cout<<"EX  ";
+                            // cout<<"EX";
+                            s.append("EX");
                         }
                         else {
-                            cout<<"/EX ";
+                            // cout<<"/EX";
+                            s.append("/EX");
                         }
                         
                     }
                     else {
                         if (instr_printed_in_curr_cycle == 0){
-                            cout<<"-   ";
+                            // cout<<"-";
+                            s.append("-");
                         }
                         else {
-                            cout<<"/-  ";
+                            // cout<<"/-";
+                            s.append("/-");
                         }
                     }
                     instr_printed_in_curr_cycle++;
@@ -1061,19 +933,23 @@ void Pipeline :: printPipeline(int cycles){
                 if (instr_memory[mem_index].first == j){
                     if (instr_memory[mem_index].second.second == 1){
                         if (instr_printed_in_curr_cycle == 0){
-                            cout<<"MEM ";
+                            // cout<<"MEM";
+                            s.append("MEM");
                         }
                         else {
-                            cout<<"/MEM"<< "|";
+                            // cout<<"/MEM";
+                            s.append("/MEM");
                         }
                         
                     }
                     else {
                         if (instr_printed_in_curr_cycle == 0){
-                            cout<<"-   ";
+                            // cout<<"-";
+                            s.append("-");
                         }
                         else {
-                            cout<<"/-  ";
+                            // cout<<"/-";
+                            s.append("/-");
                         }
                     }
                     instr_printed_in_curr_cycle++;
@@ -1087,19 +963,23 @@ void Pipeline :: printPipeline(int cycles){
                 if (instr_write[write_index].first == j){
                     if (instr_write[write_index].second.second == 1){
                         if (instr_printed_in_curr_cycle == 0){
-                            cout<<"WB  ";
+                            // cout<<"WB";
+                            s.append("WB");
                         }
                         else {
-                            cout<<"/WB ";
+                            // cout<<"/WB";
+                            s.append("/WB");
                         }
                         
                     }
                     else {
                         if (instr_printed_in_curr_cycle == 0){
-                            cout<<"-   ";
+                            // cout<<"-";
+                            s.append("-");
                         }
                         else {
-                            cout<<"/-  ";
+                            // cout<<"/-";
+                            s.append("/-");
                         }
                     }
                     instr_printed_in_curr_cycle++;
@@ -1110,13 +990,173 @@ void Pipeline :: printPipeline(int cycles){
                 write_index++;
             }
             if (instr_printed_in_curr_cycle==0){
-                cout<<"    ";
+                // cout<<" ";
+                s.append(" ");
             }
-            cout<<"|";
+            // cout<<";"
+            s.push_back(';');
         }
+        trimTrailingSemicolons(s);
+        cout<<s;
+        // cout<<".";
         cout<<endl;
     }
 }
+
+
+// Print pipeline state in debug stage
+
+// void Pipeline :: printPipeline(int cycles){
+//     for (int i=0;i<instructions.size();i++){
+//         cout << left << setw(20) << trim(instructions[i]) << "|";
+//         // int cycle_to_be_printed = 0;
+        
+//         int fetch_index = 0;
+//         int decode_index = 0;
+//         int ex_index = 0;
+//         int mem_index = 0;
+//         int write_index = 0;
+
+//         for (int j=0;j<cycles;j++){
+//             int instr_printed_in_curr_cycle = 0;
+//             if (instr_fetch[fetch_index].second.first == i){
+//                 if (instr_fetch[fetch_index].first == j){
+//                     if (instr_fetch[fetch_index].second.second == 1){
+//                         if (instr_printed_in_curr_cycle == 0){
+//                             cout<<"IF  ";
+//                         }
+//                         else {
+//                             cout<<"/IF ";
+//                         }
+                        
+//                     }
+//                     else {
+//                         if (instr_printed_in_curr_cycle == 0){
+//                             cout<<"-   ";
+//                         }
+//                         else {
+//                             cout<<"/-  ";
+//                         }
+//                     }
+//                     instr_printed_in_curr_cycle++;
+//                     fetch_index++;
+//                 }
+//             }
+//             else {
+//                 fetch_index++;
+//             }
+//             if (instr_decode[decode_index].second.first == i){
+//                 if (instr_decode[decode_index].first == j){
+//                     if (instr_decode[decode_index].second.second == 1){
+//                         if (instr_printed_in_curr_cycle == 0){
+//                             cout<<"ID  ";
+//                         }
+//                         else {
+//                             cout<<"/ID ";
+//                         }
+                        
+//                     }
+//                     else {
+//                         if (instr_printed_in_curr_cycle == 0){
+//                             cout<<"-   ";
+//                         }
+//                         else {
+//                             cout<<"/-  ";
+//                         }
+//                     }
+//                     instr_printed_in_curr_cycle++;
+//                     decode_index++;
+//                 }
+//             }
+//             else {
+//                 decode_index++;
+//             }
+//             if (instr_execute[ex_index].second.first == i){
+//                 if (instr_execute[ex_index].first == j){
+//                     if (instr_execute[ex_index].second.second == 1){
+//                         if (instr_printed_in_curr_cycle == 0){
+//                             cout<<"EX  ";
+//                         }
+//                         else {
+//                             cout<<"/EX ";
+//                         }
+                        
+//                     }
+//                     else {
+//                         if (instr_printed_in_curr_cycle == 0){
+//                             cout<<"-   ";
+//                         }
+//                         else {
+//                             cout<<"/-  ";
+//                         }
+//                     }
+//                     instr_printed_in_curr_cycle++;
+//                     ex_index++;
+//                 }
+//             }
+//             else {
+//                 ex_index++;
+//             }
+//             if (instr_memory[mem_index].second.first == i){
+//                 if (instr_memory[mem_index].first == j){
+//                     if (instr_memory[mem_index].second.second == 1){
+//                         if (instr_printed_in_curr_cycle == 0){
+//                             cout<<"MEM ";
+//                         }
+//                         else {
+//                             cout<<"/MEM"<< "|";
+//                         }
+                        
+//                     }
+//                     else {
+//                         if (instr_printed_in_curr_cycle == 0){
+//                             cout<<"-   ";
+//                         }
+//                         else {
+//                             cout<<"/-  ";
+//                         }
+//                     }
+//                     instr_printed_in_curr_cycle++;
+//                     mem_index++;
+//                 }
+//             }
+//             else {
+//                 mem_index++;
+//             }
+//             if (instr_write[write_index].second.first == i){
+//                 if (instr_write[write_index].first == j){
+//                     if (instr_write[write_index].second.second == 1){
+//                         if (instr_printed_in_curr_cycle == 0){
+//                             cout<<"WB  ";
+//                         }
+//                         else {
+//                             cout<<"/WB ";
+//                         }
+                        
+//                     }
+//                     else {
+//                         if (instr_printed_in_curr_cycle == 0){
+//                             cout<<"-   ";
+//                         }
+//                         else {
+//                             cout<<"/-  ";
+//                         }
+//                     }
+//                     instr_printed_in_curr_cycle++;
+//                     write_index++;
+//                 }
+//             }
+//             else {
+//                 write_index++;
+//             }
+//             if (instr_printed_in_curr_cycle==0){
+//                 cout<<"    ";
+//             }
+//             cout<<"|";
+//         }
+//         cout<<endl;
+//     }
+// }
 
 
 uint32_t Pipeline::signExtend(uint32_t instruction)

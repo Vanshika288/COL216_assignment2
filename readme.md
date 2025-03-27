@@ -1,53 +1,3 @@
-✅ Usage:
-Compile the executables:
-# Compile both versions
-make
-
-Run Non-Forwarding Version:
-./noforward ../inputfiles/strlen.txt 20
-
-Run Forwarding Version:
-./forward ../inputfiles/strlen.txt 20
-
-Clean the project:
-make clean
-
-______________________________________________________________________________________________________________________
-
-Directory Structure:
-
-📦 riscv-simulator
-├── 📂 src
-│   ├── main.cpp
-│   ├── pipeline.cpp
-│   ├── pipeline.hpp
-│   ├── control.cpp
-│   ├── control.hpp
-│   ├── registers.cpp
-│   ├── registers.hpp
-│   ├── alu.cpp
-│   ├── alu.hpp
-│   ├── Makefile
-└── 📂 inputfiles
-    ├── strlen.txt
-    ├── stringcopy.txt
-    └── strncpy.txt
-
-_________________________________________________________________________________
-
-🎯 Usage
-To build both executables:
-make
-To build only noforward:
-make noforward
-To build only forward:
-make forward
-To clean up:
-make clean
-
-
-....................................................................................
-
 RISC-V Pipeline Simulator
 
 Project Overview
@@ -75,6 +25,8 @@ Features
 - We have printed the pipeline in the end. We can also print the register values if required as a debug meeasure.
 
 Directory Structure
+/inputfiles
+/outputfiles
 /src
 ├── alu.cpp             # ALU implementation
 ├── alu.hpp             # ALU header file
@@ -88,69 +40,26 @@ Directory Structure
 ├── main.cpp            # Main driver file
 ├── assembly_code.txt   # Stores assembly instructions
 ├── machine_code.txt    # Stores corresponding machine code
-└── temp.txt            # Temporary file (ignored by Git)
+├── Makefile.txt        # Makefile
 
-Installation and Build Instructions
-1. Clone the Repository
-git clone https://github.com/your-username/RISCV-Pipeline.git
-cd RISCV-Pipeline/src
+Build Instructions
+1. Build Using Makefile
+# To build both the versions
+make
 
-2. Build Using Makefile
 # To build the version with forwarding
 make forward
 
 # To build the version without forwarding
 make noforward
 
-3. Run the Executables
+2. Run the Executables
 # Run the simulator with forwarding
-./forward
+$./forward ../inputfiles/filename.txt cyclecount
 
 # Run the simulator without forwarding
-./noforward
+$./noforward ../inputfiles/filename.txt cyclecount
 
-Usage Instructions
-1. Place the assembly instructions in assembly_code.txt in the following format:
-addi x10, x0, 4
-addi x6, x0, 10
-sw x6, 8(x10)
-lw x5, 8(x10)
-add x7, x5, x5
-
-2. Run the respective executable to generate the machine code in machine_code.txt.
-
-3. Pipeline Visualization:
-- The pipeline stages are displayed cycle-by-cycle for easy verification.
-
-Test Cases
-Example Test Case:
-addi x10, x0, 4
-addi x6, x0, 10
-sw x6, 8(x10)
-lw x5, 8(x10)
-beq x5, x6, 8
-addi x5, x5, 1
-jal x0, -16
-
-Machine Code Output:
-00400513
-00a00313
-00652423
-00852283
-00b28263
-00128293
-ff1ff06f
-
-Pipeline Execution Diagram
-Instruction       | IF | ID | EX | MEM | WB
-------------------|----|----|----|-----|---
-addi x10, x0, 4   | 1  | 2  | 3  | 4   | 5
-addi x6, x0, 10   |    | 3  | 4  | 5   | 6
-sw x6, 8(x10)     |    |    | 5  | 6   | -
-lw x5, 8(x10)     |    |    |    | 7   | 8
-beq x5, x6, 8     |    |    |    |     | -
-addi x5, x5, 1    |    |    |    |     | -
-jal x0, -16       |    |    |    |     | -
 
 Makefile Targets
 - make forward – Build the pipeline simulator with forwarding.
@@ -159,7 +68,6 @@ Makefile Targets
 
 Contributors
 - Shivankur Gupta – IIT Delhi
+- Vanshika - IIT Delhi
 - Project developed as part of COL216: Computer Architecture assignment.
 
-Contact
-If you encounter any issues or have any suggestions, feel free to open an issue or contact me via email.

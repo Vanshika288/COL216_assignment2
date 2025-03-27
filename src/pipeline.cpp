@@ -152,7 +152,7 @@ void Pipeline::ID_stage(int cycle)
 
         switch (id_ex.opcode)
         {
-        case 0x33: // add subt etc. // R type
+        case 0x33: // add and or slt etc. // R type
             id_ex.rs1 = (if_id.instruction >> 15) & 0x1F;
             id_ex.rs2 = (if_id.instruction >> 20) & 0x1F;
             id_ex.rd = (if_id.instruction >> 7) & 0x1F;

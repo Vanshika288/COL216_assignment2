@@ -14,13 +14,44 @@ Control::Control() {
 // Set control signals based on opcode
 void Control::setControl(uint32_t opcode, uint32_t funct3) {
     switch (opcode) {
-        case 0x33:  // R-type (ADD)
-            regWrite = true;
-            aluSrc = false;
-            memRead = false;
-            memWrite = false;
-            memToReg = false;
-            aluOp = 0;
+        case 0x33:  // R-type (ADD OR AND)
+            switch (funct3){
+                case 0 :  // ADD
+                    regWrite = true;
+                    aluSrc = false;
+                    memRead = false;
+                    memWrite = false;
+                    memToReg = false;
+                    aluOp = 0;
+                    break;
+                case 6:  //OR
+                    regWrite = true;
+                    aluSrc = false;
+                    memRead = false;
+                    memWrite = false;
+                    memToReg = false;
+                    aluOp = 3;
+                    break;
+                case 7: //AND
+                    regWrite = true;
+                    aluSrc = false;
+                    memRead = false;
+                    memWrite = false;
+                    memToReg = false;
+                    aluOp = 2;
+                    break;
+                case 2 : //Slt
+                    regWrite = true;
+                    aluSrc = false;
+                    memRead = false;
+                    memWrite = false;
+                    memToReg = false;
+                    aluOp = 5;
+                    break;
+                default:
+                    break;
+            }
+            
             break;
 
         case 0x13:  // I-type (ADDI, ANDI, ORI, etc.) 

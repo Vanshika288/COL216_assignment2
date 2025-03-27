@@ -11,5 +11,5 @@ ff8e3e83 ld x29 -8 x28
 ffee3c23 sd x30 -8 x28
 00130313 addi x6 x6 1
 fd9ff06f jal x0 -40
-fc0296e3 bne x5 x0 -52 <bubsort>
+fc0296e3 bne x5 x0 -52
 00008067 jalr x0 x1 0

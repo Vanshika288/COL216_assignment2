@@ -1,0 +1,17 @@
+00261293        slli x5 x12 2
+005582b3        add x5 x11 x5
+00c2a023        sw x12 0 x5
+00261313        slli x6 x12 2
+00650333        add x6 x10 x6
+00032383        lw x7 0 x6
+02038463        beq x7 x0 40
+00239e13        slli x28 x7 2
+01c58e33        add x28 x11 x28
+000e2e83        lw x29 0 x28
+000e9863        bne x29 x0 16
+00038613        addi x12 x7 0
+00000097        auipc x1 0x0
+fe4080e7        jalr x1 x1 -28
+00430313        addi x6 x6 4
+fd9ff06f        jal x0 -40
+00008067        jalr x0 x1 0

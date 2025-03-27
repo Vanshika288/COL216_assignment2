@@ -1,4 +1,4 @@
-≈wb_stage 
+wb_stage 
 mem_stage 
 ex_stage id_stage
 id_Stage no stall
@@ -10,9 +10,13 @@ mem_stage
 ex_stage id_stage
 id_Stage no stall
 fetches from prev latch
-addi instr. recognised 
-addi instr correctly recognised
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 0, rd: 10, imm: 4
+addi  instr correctly recognised
 print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 10486547 4
@@ -24,9 +28,13 @@ when it returns zero as alu result : reg value 10
 id_stage
 id_Stage no stall
 fetches from prev latch
-addi instr. recognised 
-addi instr correctly recognised
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 0, rd: 6, imm: 10
+addi  instr correctly recognised
 print10 0
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 6628387 8
@@ -41,6 +49,8 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 print6 10
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 8725123 12
@@ -52,11 +62,13 @@ no mem op
 10 6 
 ex_stage some execution occurs
 12
-when it returns zero as alu result : reg value 6
+when it returns zero as alu result : reg value 0
 id_stage
 id_Stage no stall
 fetches from prev latch
-print6 6
+print0 6
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 5407667 16
@@ -65,7 +77,7 @@ to be written
 write_here from reg
 mem_stage 
 to be written in mem
-12 6 
+12 0 
 ex_stage some execution occurs
 12
 when it returns zero as alu result : reg value 5
@@ -75,7 +87,8 @@ fetches from prev latch
 it's add instr
 intruction5407667
 register values of add instr : 5 5 7
-print5 6
+print5 0
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 1278995 20
@@ -83,10 +96,13 @@ wb_stage
 not to be written
 mem_stage 
 to be read from mem
+load word instr.
 12 5 
 ex_stage id_stage
 does not fetch from prev latch
 print0 5
+helloooooo ID no stall toh true h
+should not got hereeeee
 earlier stall and free _latch set to false
 if_stage wb_stage 
 to be written
@@ -98,9 +114,13 @@ when it returns zero as alu result : reg value 7
 id_stage
 id_Stage no stall
 fetches from prev latch
-addi instr. recognised 
-addi instr correctly recognised
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 7, rd: 8, imm: 1
+addi  instr correctly recognised
 print7 0
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 8726051 24
@@ -115,6 +135,8 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 print8 7
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 12919939 28
@@ -126,11 +148,13 @@ no mem op
 21 8 
 ex_stage some execution occurs
 16
-when it returns zero as alu result : reg value 8
+when it returns zero as alu result : reg value 0
 id_stage
 id_Stage no stall
 fetches from prev latch
-print8 8
+print0 8
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 6587827 32
@@ -139,7 +163,7 @@ to be written
 write_here from reg
 mem_stage 
 to be written in mem
-16 8 
+16 0 
 ex_stage some execution occurs
 16
 when it returns zero as alu result : reg value 9
@@ -149,7 +173,8 @@ fetches from prev latch
 it's add instr
 intruction6587827
 register values of add instr : 9 6 11
-print9 8
+print9 0
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 9765987 36
@@ -157,10 +182,13 @@ wb_stage
 not to be written
 mem_stage 
 to be read from mem
+load word instr.
 16 9 
 ex_stage id_stage
 does not fetch from prev latch
 print0 9
+helloooooo ID no stall toh true h
+should not got hereeeee
 earlier stall and free _latch set to false
 if_stage wb_stage 
 to be written
@@ -173,6 +201,11 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 print11 0
+12 
+11 10 9
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 5576291 40
@@ -182,11 +215,16 @@ no mem op
 31 11 
 ex_stage some execution occurs
 4294967279
-when it returns zero as alu result : reg value 11
+when it returns zero as alu result : reg value 0
 id_stage
 id_Stage no stall
 fetches from prev latch
-print11 11
+print0 11
+13 
+0 10 5
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 16777455 44
@@ -195,10 +233,10 @@ to be written
 write_here from reg
 mem_stage 
 no mem op
-4294967279 11 
+4294967279 0 
 ex_stage some execution occurs
 4294967290
-when it returns zero as alu result : reg value 11
+when it returns zero as alu result : reg value 0
 id_stage
 id_Stage no stall
 if_stage latch is empty and free
@@ -208,14 +246,16 @@ wb_stage
 not to be written
 mem_stage 
 no mem op
-4294967290 11 
+4294967290 0 
 ex_stage id_stage
 id_Stage no stall
 fetches from prev latch
 it's add instr
 intruction10650419
 register values of add instr : 5 10 6
-print0 11
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 197379 56
@@ -229,6 +269,8 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 print6 0
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 1213075 60
@@ -242,9 +284,13 @@ when it returns zero as alu result : reg value 6
 id_stage
 id_Stage no stall
 fetches from prev latch
-addi instr. recognised 
-addi instr correctly recognised
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 5, rd: 5, imm: 1
+addi  instr correctly recognised
 print6 6
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 4280283247 64
@@ -253,6 +299,7 @@ to be written
 write_here from reg
 mem_stage 
 to be read from mem
+load byte instr.
 14 6 
 ex_stage some execution occurs
 11
@@ -261,6 +308,13 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 print5 6
+####jal instr####
+18 
+5 0 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+jalr instr. is recogniseddddd
+go hereeeeee
 if_stage latch is empty and free
 wb_stage 
 to be written
@@ -286,6 +340,11 @@ ex_stage id_stage
 id_Stage no stall
 fetches from prev latch
 print0 0
+20 
+0 1 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 10650419 52
@@ -308,9 +367,13 @@ no mem op
 ex_stage id_stage
 id_Stage no stall
 fetches from prev latch
-addi instr. recognised 
-addi instr correctly recognised
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 0, rd: 10, imm: 4
+addi  instr correctly recognised
 print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 10486547 4
@@ -324,9 +387,13 @@ when it returns zero as alu result : reg value 10
 id_stage
 id_Stage no stall
 fetches from prev latch
-addi instr. recognised 
-addi instr correctly recognised
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 0, rd: 6, imm: 10
+addi  instr correctly recognised
 print10 0
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 6628387 8
@@ -341,6 +408,8 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 print6 10
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 8725123 12
@@ -352,11 +421,13 @@ no mem op
 10 6 
 ex_stage some execution occurs
 12
-when it returns zero as alu result : reg value 6
+when it returns zero as alu result : reg value 0
 id_stage
 id_Stage no stall
 fetches from prev latch
-print6 6
+print0 6
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 5407667 16
@@ -365,7 +436,7 @@ to be written
 write_here from reg
 mem_stage 
 to be written in mem
-12 6 
+12 0 
 ex_stage some execution occurs
 12
 when it returns zero as alu result : reg value 5
@@ -375,7 +446,8 @@ fetches from prev latch
 it's add instr
 intruction5407667
 register values of add instr : 5 5 7
-print5 6
+print5 0
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 1278995 20
@@ -383,10 +455,13 @@ wb_stage
 not to be written
 mem_stage 
 to be read from mem
+load word instr.
 12 5 
 ex_stage id_stage
 does not fetch from prev latch
 print0 5
+helloooooo ID no stall toh true h
+should not got hereeeee
 earlier stall and free _latch set to false
 if_stage wb_stage 
 to be written
@@ -398,9 +473,13 @@ when it returns zero as alu result : reg value 7
 id_stage
 id_Stage no stall
 fetches from prev latch
-addi instr. recognised 
-addi instr correctly recognised
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 7, rd: 8, imm: 1
+addi  instr correctly recognised
 print7 0
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 8726051 24
@@ -415,6 +494,8 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 print8 7
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 12919939 28
@@ -426,11 +507,13 @@ no mem op
 21 8 
 ex_stage some execution occurs
 16
-when it returns zero as alu result : reg value 8
+when it returns zero as alu result : reg value 0
 id_stage
 id_Stage no stall
 fetches from prev latch
-print8 8
+print0 8
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 6587827 32
@@ -439,7 +522,7 @@ to be written
 write_here from reg
 mem_stage 
 to be written in mem
-16 8 
+16 0 
 ex_stage some execution occurs
 16
 when it returns zero as alu result : reg value 9
@@ -449,7 +532,8 @@ fetches from prev latch
 it's add instr
 intruction6587827
 register values of add instr : 9 6 11
-print9 8
+print9 0
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 9765987 36
@@ -457,10 +541,13 @@ wb_stage
 not to be written
 mem_stage 
 to be read from mem
+load word instr.
 16 9 
 ex_stage id_stage
 does not fetch from prev latch
 print0 9
+helloooooo ID no stall toh true h
+should not got hereeeee
 earlier stall and free _latch set to false
 if_stage wb_stage 
 to be written
@@ -473,6 +560,11 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 print11 0
+33 
+11 10 9
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 5576291 40
@@ -482,11 +574,16 @@ no mem op
 31 11 
 ex_stage some execution occurs
 4294967279
-when it returns zero as alu result : reg value 11
+when it returns zero as alu result : reg value 0
 id_stage
 id_Stage no stall
 fetches from prev latch
-print11 11
+print0 11
+34 
+0 10 5
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 16777455 44
@@ -495,10 +592,10 @@ to be written
 write_here from reg
 mem_stage 
 no mem op
-4294967279 11 
+4294967279 0 
 ex_stage some execution occurs
 4294967290
-when it returns zero as alu result : reg value 11
+when it returns zero as alu result : reg value 0
 id_stage
 id_Stage no stall
 if_stage latch is empty and free
@@ -508,14 +605,16 @@ wb_stage
 not to be written
 mem_stage 
 no mem op
-4294967290 11 
+4294967290 0 
 ex_stage id_stage
 id_Stage no stall
 fetches from prev latch
 it's add instr
 intruction10650419
 register values of add instr : 5 10 6
-print0 11
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 197379 56
@@ -529,6 +628,8 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 print6 0
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 1213075 60
@@ -542,9 +643,13 @@ when it returns zero as alu result : reg value 6
 id_stage
 id_Stage no stall
 fetches from prev latch
-addi instr. recognised 
-addi instr correctly recognised
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 5, rd: 5, imm: 1
+addi  instr correctly recognised
 print6 6
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 4280283247 64
@@ -553,6 +658,7 @@ to be written
 write_here from reg
 mem_stage 
 to be read from mem
+load byte instr.
 14 6 
 ex_stage some execution occurs
 11
@@ -561,6 +667,13 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 print5 6
+####jal instr####
+39 
+5 0 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+jalr instr. is recogniseddddd
+go hereeeeee
 if_stage latch is empty and free
 wb_stage 
 to be written
@@ -586,6 +699,11 @@ ex_stage id_stage
 id_Stage no stall
 fetches from prev latch
 print0 0
+41 
+0 1 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 10650419 52
@@ -608,9 +726,13 @@ no mem op
 ex_stage id_stage
 id_Stage no stall
 fetches from prev latch
-addi instr. recognised 
-addi instr correctly recognised
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 0, rd: 10, imm: 4
+addi  instr correctly recognised
 print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 10486547 4
@@ -624,9 +746,13 @@ when it returns zero as alu result : reg value 10
 id_stage
 id_Stage no stall
 fetches from prev latch
-addi instr. recognised 
-addi instr correctly recognised
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 0, rd: 6, imm: 10
+addi  instr correctly recognised
 print10 0
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 6628387 8
@@ -641,6 +767,8 @@ id_stage
 id_Stage no stall
 fetches from prev latch
 print6 10
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 8725123 12
@@ -652,11 +780,13 @@ no mem op
 10 6 
 ex_stage some execution occurs
 12
-when it returns zero as alu result : reg value 6
+when it returns zero as alu result : reg value 0
 id_stage
 id_Stage no stall
 fetches from prev latch
-print6 6
+print0 6
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 5407667 16
@@ -665,7 +795,7 @@ to be written
 write_here from reg
 mem_stage 
 to be written in mem
-12 6 
+12 0 
 ex_stage some execution occurs
 12
 when it returns zero as alu result : reg value 5
@@ -675,7 +805,8 @@ fetches from prev latch
 it's add instr
 intruction5407667
 register values of add instr : 5 5 7
-print5 6
+print5 0
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 1278995 20
@@ -683,10 +814,13 @@ wb_stage
 not to be written
 mem_stage 
 to be read from mem
+load word instr.
 12 5 
 ex_stage id_stage
 does not fetch from prev latch
 print0 5
+helloooooo ID no stall toh true h
+should not got hereeeee
 earlier stall and free _latch set to false
 if_stage wb_stage 
 to be written
@@ -698,9 +832,13 @@ when it returns zero as alu result : reg value 7
 id_stage
 id_Stage no stall
 fetches from prev latch
-addi instr. recognised 
-addi instr correctly recognised
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 7, rd: 8, imm: 1
+addi  instr correctly recognised
 print7 0
+helloooooo ID no stall toh true h
+go hereeeeee
 if_stage latch is empty and free
 inst.fetch occurs
 8726051 24
@@ -714,20 +852,20 @@ x16:        0	x17:        0	x18:        0	x19:        0
 x20:        0	x21:        0	x22:        0	x23:        0
 x24:        0	x25:        0	x26:        0	x27:        0
 x28:        0	x29:        0	x30:        0	x31:        0
-addi x10 x0 4       |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |
-addi x6 x0 10       |-   |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |
-sw x6 8 x10         |-   |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |
-lw x5 8 x10         |-   |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |
-add x7 x5 x5        |-   |    |    |    |IF  |ID  |-   |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |-   |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |-   |EX  |
-addi x8 x7 1        |-   |    |    |    |    |IF  |-   |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |-   |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |-   |ID  |
-sw x8 12 x10        |-   |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |
-lw x9 12 x10        |-   |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-add x11 x9 x6       |-   |    |    |    |    |    |    |    |    |IF  |ID  |-   |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |-   |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |
-beq x10 x9 8        |-   |    |    |    |    |    |    |    |    |    |IF  |-   |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |-   |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |
-bne x10 x5 12       |-   |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |
-jal x1 16           |-   |    |    |    |    |    |    |    |    |    |    |    |    |IF  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-jalr x0 x1 0        |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |
-add x6 x5 x10       |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |IF  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |IF  |-   |    |    |    |    |    |    |    |
-lb x6 0 x6          |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |
-addi x5 x5 1        |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |
-jal x0 -16          |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |    |    |    |    |    |
+addi x10 x0 4       |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |
+addi x6 x0 10       |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |
+sw x6 8 x10         |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |
+lw x5 8 x10         |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |
+add x7 x5 x5        |    |    |    |    |IF  |ID  |-   |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |-   |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |-   |EX  |
+addi x8 x7 1        |    |    |    |    |    |IF  |-   |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |-   |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |-   |ID  |
+sw x8 12 x10        |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |
+lw x9 12 x10        |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+add x11 x9 x6       |    |    |    |    |    |    |    |    |    |IF  |ID  |-   |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |-   |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+beq x10 x9 8        |    |    |    |    |    |    |    |    |    |    |IF  |-   |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |-   |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |
+bne x10 x5 12       |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |
+jal x1 16           |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+jalr x0 x1 0        |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |
+add x6 x5 x10       |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |IF  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |IF  |    |    |    |    |    |    |    |    |
+lb x6 0 x6          |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |
+addi x5 x5 1        |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |
+jal x0 -16          |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |IF  |ID  |EX  |MEM |WB  |    |    |    |    |    |    |    |

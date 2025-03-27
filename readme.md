@@ -10,19 +10,19 @@ This project simulates a 5-stage RISC-V pipeline with and without forwarding. It
 
 Features
 - Supports key RISC-V instructions:
-  - Arithmetic: add, addi
-  - Memory: lw, sw
+  - Arithmetic: add, addi, slli, srai, srli
+  - Memory: lw, lb, lh, sw
   - Branches: beq, bne, bge, blt
   - Jumps: jal, jalr
-  - More: aupic
+  - More: auipc
 
 - Implements hazard detection and inserts bubbles when required. We have put appropriate stalls and forwarded values properly wherever required.
 
-- We have initialised all the register values to 0, and we are updating the register values as we proceed, since we are doing the calculations necessary in the ALU stage. We have simulated the processor completed with all the functionalities.
+- We have initialised all the register and memory values to 0, and we are updating the values as we proceed, since we are doing the calculations necessary in the ALU stage. We have simulated the processor completed with all the functionalities.
 
-- Branches: We are resolving branches in the ID stage by taking care of the register values i.e, we have not always assumed branch not taken, but are resolving branches according to the register values. For ex, in beq, we will take the branch if the 2 register values are equal, and not take the branch otherwise.
+- Branches: We are resolving branches and jumps in the ID stage by taking care of the values i.e, we have not always assumed branch not taken, but are resolving branches according to the register and memory values. For ex, in beq, we will take the branch if the 2 register values are equal, and not take the branch otherwise.
 
-- We have printed the pipeline in the end. We can also print the register values if required as a debug meeasure.
+- We have printed the pipeline in the end. We can also print the register values if required as a debug meeasure. We have printed '/' as a delimeter where instruction is in more than one stages. 
 
 Directory Structure
 /inputfiles

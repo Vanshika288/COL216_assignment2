@@ -1,0 +1,809 @@
+wb_stage 
+mem_stage 
+ex_stage id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+10859555 0
+wb_stage 
+mem_stage 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+361747 4
+wb_stage 
+mem_stage 
+ex_stage some execution occurs
+8
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+fetches from prev latch
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 11, rd: 10, imm: 0
+addi  instr correctly recognised
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+32871 8
+wb_stage 
+mem_stage 
+to be written in mem
+8 0 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 10
+id_stage
+id_Stage no stall
+fetches from prev latch
+print10 0
+3 
+10 1 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+wb_stage 
+not to be written
+mem_stage 
+no mem op
+0 10 
+ex_stage some execution occurs
+12
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+10859555 0
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+no mem op
+12 0 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+361747 4
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+ex_stage some execution occurs
+8
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+fetches from prev latch
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 11, rd: 10, imm: 0
+addi  instr correctly recognised
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+32871 8
+wb_stage 
+mem_stage 
+to be written in mem
+8 0 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 10
+id_stage
+id_Stage no stall
+fetches from prev latch
+print10 0
+7 
+10 1 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+wb_stage 
+not to be written
+mem_stage 
+no mem op
+0 10 
+ex_stage some execution occurs
+12
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+10859555 0
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+no mem op
+12 0 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+361747 4
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+ex_stage some execution occurs
+8
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+fetches from prev latch
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 11, rd: 10, imm: 0
+addi  instr correctly recognised
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+32871 8
+wb_stage 
+mem_stage 
+to be written in mem
+8 0 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 10
+id_stage
+id_Stage no stall
+fetches from prev latch
+print10 0
+11 
+10 1 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+wb_stage 
+not to be written
+mem_stage 
+no mem op
+0 10 
+ex_stage some execution occurs
+12
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+10859555 0
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+no mem op
+12 0 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+361747 4
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+ex_stage some execution occurs
+8
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+fetches from prev latch
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 11, rd: 10, imm: 0
+addi  instr correctly recognised
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+32871 8
+wb_stage 
+mem_stage 
+to be written in mem
+8 0 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 10
+id_stage
+id_Stage no stall
+fetches from prev latch
+print10 0
+15 
+10 1 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+wb_stage 
+not to be written
+mem_stage 
+no mem op
+0 10 
+ex_stage some execution occurs
+12
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+10859555 0
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+no mem op
+12 0 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+361747 4
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+ex_stage some execution occurs
+8
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+fetches from prev latch
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 11, rd: 10, imm: 0
+addi  instr correctly recognised
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+32871 8
+wb_stage 
+mem_stage 
+to be written in mem
+8 0 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 10
+id_stage
+id_Stage no stall
+fetches from prev latch
+print10 0
+19 
+10 1 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+wb_stage 
+not to be written
+mem_stage 
+no mem op
+0 10 
+ex_stage some execution occurs
+12
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+10859555 0
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+no mem op
+12 0 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+361747 4
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+ex_stage some execution occurs
+8
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+fetches from prev latch
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 11, rd: 10, imm: 0
+addi  instr correctly recognised
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+32871 8
+wb_stage 
+mem_stage 
+to be written in mem
+8 0 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 10
+id_stage
+id_Stage no stall
+fetches from prev latch
+print10 0
+23 
+10 1 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+wb_stage 
+not to be written
+mem_stage 
+no mem op
+0 10 
+ex_stage some execution occurs
+12
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+10859555 0
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+no mem op
+12 0 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+361747 4
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+ex_stage some execution occurs
+8
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+fetches from prev latch
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 11, rd: 10, imm: 0
+addi  instr correctly recognised
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+32871 8
+wb_stage 
+mem_stage 
+to be written in mem
+8 0 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 10
+id_stage
+id_Stage no stall
+fetches from prev latch
+print10 0
+27 
+10 1 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+wb_stage 
+not to be written
+mem_stage 
+no mem op
+0 10 
+ex_stage some execution occurs
+12
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+10859555 0
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+no mem op
+12 0 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+361747 4
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+ex_stage some execution occurs
+8
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+fetches from prev latch
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 11, rd: 10, imm: 0
+addi  instr correctly recognised
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+32871 8
+wb_stage 
+mem_stage 
+to be written in mem
+8 0 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 10
+id_stage
+id_Stage no stall
+fetches from prev latch
+print10 0
+31 
+10 1 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+wb_stage 
+not to be written
+mem_stage 
+no mem op
+0 10 
+ex_stage some execution occurs
+12
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+10859555 0
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+no mem op
+12 0 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+361747 4
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+ex_stage some execution occurs
+8
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+fetches from prev latch
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 11, rd: 10, imm: 0
+addi  instr correctly recognised
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+32871 8
+wb_stage 
+mem_stage 
+to be written in mem
+8 0 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 10
+id_stage
+id_Stage no stall
+fetches from prev latch
+print10 0
+35 
+10 1 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+wb_stage 
+not to be written
+mem_stage 
+no mem op
+0 10 
+ex_stage some execution occurs
+12
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+10859555 0
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+no mem op
+12 0 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+361747 4
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+ex_stage some execution occurs
+8
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+fetches from prev latch
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 11, rd: 10, imm: 0
+addi  instr correctly recognised
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+32871 8
+wb_stage 
+mem_stage 
+to be written in mem
+8 0 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 10
+id_stage
+id_Stage no stall
+fetches from prev latch
+print10 0
+39 
+10 1 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+wb_stage 
+not to be written
+mem_stage 
+no mem op
+0 10 
+ex_stage some execution occurs
+12
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+10859555 0
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+no mem op
+12 0 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+361747 4
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+ex_stage some execution occurs
+8
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+fetches from prev latch
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 11, rd: 10, imm: 0
+addi  instr correctly recognised
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+32871 8
+wb_stage 
+mem_stage 
+to be written in mem
+8 0 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 10
+id_stage
+id_Stage no stall
+fetches from prev latch
+print10 0
+43 
+10 1 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+wb_stage 
+not to be written
+mem_stage 
+no mem op
+0 10 
+ex_stage some execution occurs
+12
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+10859555 0
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+no mem op
+12 0 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+361747 4
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+ex_stage some execution occurs
+8
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+fetches from prev latch
+I-type instruction recognized
+ADDI instruction recognized
+ADDI rs1: 11, rd: 10, imm: 0
+addi  instr correctly recognised
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+32871 8
+wb_stage 
+mem_stage 
+to be written in mem
+8 0 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 10
+id_stage
+id_Stage no stall
+fetches from prev latch
+print10 0
+47 
+10 1 0
+should have gone hereeeee
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+wb_stage 
+not to be written
+mem_stage 
+no mem op
+0 10 
+ex_stage some execution occurs
+12
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+10859555 0
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+no mem op
+12 0 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+helloooooo ID no stall toh true h
+go hereeeeee
+if_stage latch is empty and free
+inst.fetch occurs
+361747 4
+
+Final state of registers:
+x 0:        0	x 1:        0	x 2:        0	x 3:        0
+x 4:        0	x 5:        0	x 6:        0	x 7:        0
+x 8:        0	x 9:        0	x10:        0	x11:        0
+x12:        0	x13:        0	x14:        0	x15:        0
+x16:        0	x17:        0	x18:        0	x19:        0
+x20:        0	x21:        0	x22:        0	x23:        0
+x24:        0	x25:        0	x26:        0	x27:        0
+x28:        0	x29:        0	x30:        0	x31:        0
+sd x10 8 x11        |IF  |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |
+addi x10 x11 0      |    |IF  |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |
+jalr x0 x1 0        |    |    |IF  |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |IF  /WB |ID  |EX  |MEM |

@@ -81,6 +81,6 @@ int main(int argc, char* argv[]) {
     std::cout << "\nFinal state of registers:\n";
     pipeline.dumpRegisters();
     // for (int i=0;i<pipeline) 
-    pipeline.printPipeline();
+    pipeline.printPipeline(cycleCount);
     return 0;
 }

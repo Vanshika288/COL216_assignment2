@@ -92,9 +92,11 @@ void Pipeline::IF_stage(int cycle)
         pc += 4;
         // instr_fetch.push_back(cycle);
         table[(if_id.pc) / 4].push_back({"IF", cycle});
+        instr_fetch.push_back({cycle, {(if_id.pc) / 4,1}});
     }
     else
     {
+        instr_fetch.push_back({cycle,{(if_id.pc) / 4,0}});
         return;
     }
 }
@@ -323,6 +325,11 @@ void Pipeline::ID_stage(int cycle)
                 }
                 else
                 {
+                    ID_stall = false;
+                    id_ex.no_op = false;
+                    id_ex.forwardA = 0;
+                    id_ex.forwardB = 0;
+                    id_ex.mem_forward = false;
                     if (id_ex.rs1 == mem_wb.rd)
                     {
                         id_ex.data1 = mem_wb.aluResult;
@@ -332,6 +339,13 @@ void Pipeline::ID_stage(int cycle)
                         id_ex.data2 = mem_wb.aluResult;
                     }
                 }
+            }
+            else {
+                ID_stall = false;
+                id_ex.no_op = false;
+                id_ex.forwardA = 0;
+                id_ex.forwardB = 0;
+                id_ex.mem_forward = false;
             }
         }
         else
@@ -563,11 +577,13 @@ void Pipeline::ID_stage(int cycle)
     {
         // instr_decode.push_back(cycle);
         table[(id_ex.pc) / 4].push_back({"ID", cycle});
+        instr_decode.push_back({cycle, {(id_ex.pc) / 4,1}});
     }
     if (earlier_stall)
     {
         cout << "earlier stall and free _latch set to false" << endl;
         if_id.free_latch = false;
+        instr_decode.push_back({cycle, {(id_ex.pc) / 4,0}});
     }
 }
 
@@ -636,6 +652,7 @@ void Pipeline::EX_stage(int cycle)
     ex_mem.mem_forward = id_ex.mem_forward;
     ex_mem.opcode = id_ex.opcode;
     table[(ex_mem.pc) / 4].push_back({"EX", cycle});
+    instr_execute.push_back({cycle, {(ex_mem.pc) / 4,1}});
 }
 
 // MEM_stage: Memory stage
@@ -685,6 +702,7 @@ void Pipeline::MEM_stage(int cycle)
     mem_wb.pc = ex_mem.pc;
     mem_wb.opcode = ex_mem.opcode;
     table[(mem_wb.pc) / 4].push_back({"DM", cycle});
+    instr_memory.push_back({cycle, {(mem_wb.pc) / 4,1}}); 
 }
 
 // WB_stage: Write-Back stage
@@ -718,6 +736,7 @@ void Pipeline::WB_stage(int cycle)
     }
     // instr_write.push_back(cycle);
     table[(mem_wb.pc) / 4].push_back({"WB", cycle});
+    instr_write.push_back({cycle, {(mem_wb.pc) / 4,1}});
 }
 
 // Print pipeline state
@@ -884,61 +903,212 @@ string trim(const string &s)
 //     }
 // }
 
-void Pipeline::printPipeline()
-{
-    unordered_map<string, string> stageOrder = {{"IF", "ID"}, {"ID", "EX"}, {"EX", "DM"}, {"DM", "WB"}};
-
-    // Determine the maximum cycle number for formatting
-    int maxCycle = 0;
-    for (const auto &entry : table)
-    {
-        for (const auto &[stage, cycle] : entry.second)
-        {
-            maxCycle = max(maxCycle, cycle);
-        }
-    }
-
-    for (size_t i = 0; i < instructions.size(); i++)
-    {
-        cout << left << setw(20) << trim(instructions[i]) << "|"; // Print instruction with padding
-
-        if (table.find(i) == table.end())
-        {
-            cout << endl;
-            continue;
-        }
-
-        vector<pair<string, int>> stages = table[i];
-        int lastCycle = -1;
-        string lastPrintedStage = "start";
-
-        for (int cycle = 0; cycle <= maxCycle; cycle++) // Iterate over all possible cycles
-        {
-            auto it = find_if(stages.begin(), stages.end(), [cycle](const pair<string, int> &p)
-                              { return p.second == cycle; });
-
-            if (it != stages.end())
-            {
-                cout << setw(4) << it->first << "|"; // Print stage in proper column
-                lastPrintedStage = it->first;
-                lastCycle = cycle;
-            }
-            else
-            {
-                if (lastCycle + 1 == cycle)
-                {
-                    cout << setw(4) << "-" << "|"; // Stall
-                }
-                else
-                {
-                    cout << setw(4) << " " << "|"; // Flush
+void Pipeline :: printPipeline(int cycles){
+    for (int i=0;i<instructions.size();i++){
+        cout<<trim(instructions[i])<<";";
+        // int cycle_to_be_printed = 0;
+        
+        int fetch_index = 0;
+        int decode_index = 0;
+        int ex_index = 0;
+        int mem_index = 0;
+        int write_index = 0;
+        for (int j=0;j<cycles;j++){
+            int instr_printed_in_curr_cycle = 0;
+            if (instr_fetch[fetch_index].second.first == i){
+                if (instr_fetch[fetch_index].first == j){
+                    if (instr_fetch[fetch_index].second.second == 1){
+                        if (instr_printed_in_curr_cycle == 0){
+                            cout<<"IF";
+                        }
+                        else {
+                            cout<<"/IF";
+                        }
+                        
+                    }
+                    else {
+                        if (instr_printed_in_curr_cycle == 0){
+                            cout<<"-";
+                        }
+                        else {
+                            cout<<"/-";
+                        }
+                    }
+                    instr_printed_in_curr_cycle++;
+                    fetch_index++;
                 }
             }
+            else {
+                fetch_index++;
+            }
+            if (instr_decode[decode_index].second.first == i){
+                if (instr_decode[decode_index].first == j){
+                    if (instr_decode[decode_index].second.second == 1){
+                        if (instr_printed_in_curr_cycle == 0){
+                            cout<<"ID";
+                        }
+                        else {
+                            cout<<"/ID";
+                        }
+                        
+                    }
+                    else {
+                        if (instr_printed_in_curr_cycle == 0){
+                            cout<<"-";
+                        }
+                        else {
+                            cout<<"/-";
+                        }
+                    }
+                    instr_printed_in_curr_cycle++;
+                    decode_index++;
+                }
+            }
+            else {
+                decode_index++;
+            }
+            if (instr_execute[ex_index].second.first == i){
+                if (instr_execute[ex_index].first == j){
+                    if (instr_execute[ex_index].second.second == 1){
+                        if (instr_printed_in_curr_cycle == 0){
+                            cout<<"EX";
+                        }
+                        else {
+                            cout<<"/EX";
+                        }
+                        
+                    }
+                    else {
+                        if (instr_printed_in_curr_cycle == 0){
+                            cout<<"-";
+                        }
+                        else {
+                            cout<<"/-";
+                        }
+                    }
+                    instr_printed_in_curr_cycle++;
+                    ex_index++;
+                }
+            }
+            else {
+                ex_index++;
+            }
+            if (instr_memory[mem_index].second.first == i){
+                if (instr_memory[mem_index].first == j){
+                    if (instr_memory[mem_index].second.second == 1){
+                        if (instr_printed_in_curr_cycle == 0){
+                            cout<<"MEM";
+                        }
+                        else {
+                            cout<<"/MEM";
+                        }
+                        
+                    }
+                    else {
+                        if (instr_printed_in_curr_cycle == 0){
+                            cout<<"-";
+                        }
+                        else {
+                            cout<<"/-";
+                        }
+                    }
+                    instr_printed_in_curr_cycle++;
+                    mem_index++;
+                }
+            }
+            else {
+                mem_index++;
+            }
+            if (instr_write[write_index].second.first == i){
+                if (instr_write[write_index].first == j){
+                    if (instr_write[write_index].second.second == 1){
+                        if (instr_printed_in_curr_cycle == 0){
+                            cout<<"WB";
+                        }
+                        else {
+                            cout<<"/WB";
+                        }
+                        
+                    }
+                    else {
+                        if (instr_printed_in_curr_cycle == 0){
+                            cout<<"-";
+                        }
+                        else {
+                            cout<<"/-";
+                        }
+                    }
+                    instr_printed_in_curr_cycle++;
+                    write_index++;
+                }
+            }
+            else {
+                write_index++;
+            }
+            if (instr_printed_in_curr_cycle==0){
+                cout<<" ";
+            }
+            cout<<";";
         }
-
-        cout << endl;
+        cout<<endl;
     }
 }
+
+// void Pipeline::printPipeline()
+// {
+//     unordered_map<string, string> stageOrder = {{"IF", "ID"}, {"ID", "EX"}, {"EX", "DM"}, {"DM", "WB"}};
+
+//     // Determine the maximum cycle number for formatting
+//     int maxCycle = 0;
+//     for (const auto &entry : table)
+//     {
+//         for (const auto &[stage, cycle] : entry.second)
+//         {
+//             maxCycle = max(maxCycle, cycle);
+//         }
+//     }
+
+//     for (size_t i = 0; i < instructions.size(); i++)
+//     {
+//         cout << left << setw(20) << trim(instructions[i]) << "|"; // Print instruction with padding
+
+//         if (table.find(i) == table.end())
+//         {
+//             cout << endl;
+//             continue;
+//         }
+
+//         vector<pair<string, int>> stages = table[i];
+//         int lastCycle = -1;
+//         string lastPrintedStage = "start";
+
+//         for (int cycle = 0; cycle <= maxCycle; cycle++) // Iterate over all possible cycles
+//         {
+//             auto it = find_if(stages.begin(), stages.end(), [cycle](const pair<string, int> &p)
+//                               { return p.second == cycle; });
+
+//             if (it != stages.end())
+//             {
+//                 cout << setw(4) << it->first << "|"; // Print stage in proper column
+//                 lastPrintedStage = it->first;
+//                 lastCycle = cycle;
+//             }
+//             else
+//             {
+//                 if (lastCycle + 1 == cycle)
+//                 {
+//                     cout << setw(4) << "-" << "|"; // Stall
+//                 }
+//                 else
+//                 {
+//                     cout << setw(4) << " " << "|"; // Flush
+//                 }
+//             }
+//         }
+
+//         cout << endl;
+//     }
+// }
 
 uint32_t Pipeline::signExtend(uint32_t instruction)
 {

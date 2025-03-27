@@ -79,11 +79,11 @@ private:
 
     uint32_t signExtend(uint32_t instruction);
     bool ID_stall = false;
-    // vector<long long int> instr_fetch;
-    // vector<long long int> instr_decode;
-    // vector<long long int> instr_execute;
-    // vector<long long int> instr_memory;
-    // vector<long long int> instr_write;
+    vector<pair<int,pair<int,int>>> instr_fetch;
+    vector<pair<int,pair<int,int>>> instr_decode;
+    vector<pair<int,pair<int,int>>> instr_execute;
+    vector<pair<int,pair<int,int>>> instr_memory;
+    vector<pair<int,pair<int,int>>> instr_write;
 
     map<int,vector<pair<string,int>>>table;
 
@@ -97,7 +97,7 @@ public:
     void EX_stage(int cycle);
     void MEM_stage(int cycle);
     void WB_stage(int cycle);
-    void printPipeline();
+    void printPipeline(int cycles);
     void dumpRegisters();
 };
 

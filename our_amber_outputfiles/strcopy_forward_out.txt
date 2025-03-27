@@ -1,0 +1,240 @@
+wb_stage 
+mem_stage 
+ex_stage id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+361091 0
+wb_stage 
+mem_stage 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+if_stage latch is empty and free
+inst.fetch occurs
+5570595 4
+wb_stage 
+mem_stage 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 5
+id_stage
+id_Stage no stall
+fetches from prev latch
+print5 0
+if_stage latch is empty and free
+inst.fetch occurs
+165987 8
+wb_stage 
+mem_stage 
+to be read from mem
+0 5 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 5
+id_stage
+id_Stage no stall
+fetches from prev latch
+print5 5
+if_stage latch is empty and free
+inst.fetch occurs
+1377555 12
+wb_stage 
+to be written
+write_here from mem
+mem_stage 
+to be written in mem
+0 5 
+ex_stage id_stage
+does not fetch from prev latch
+print0 5
+earlier stall and free _latch set to false
+if_stage wb_stage 
+not to be written
+mem_stage 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 5
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+32871 24
+wb_stage 
+mem_stage 
+no mem op
+0 5 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 5
+if_stage latch is empty and free
+wb_stage 
+not to be written
+mem_stage 
+ex_stage some execution occurs
+28
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+361091 0
+wb_stage 
+mem_stage 
+no mem op
+28 0 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+if_stage latch is empty and free
+inst.fetch occurs
+5570595 4
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 5
+id_stage
+id_Stage no stall
+fetches from prev latch
+print5 0
+if_stage latch is empty and free
+inst.fetch occurs
+165987 8
+wb_stage 
+mem_stage 
+to be read from mem
+0 5 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 5
+id_stage
+id_Stage no stall
+fetches from prev latch
+print5 5
+if_stage latch is empty and free
+inst.fetch occurs
+1377555 12
+wb_stage 
+to be written
+write_here from mem
+mem_stage 
+to be written in mem
+0 5 
+ex_stage id_stage
+does not fetch from prev latch
+print0 5
+earlier stall and free _latch set to false
+if_stage wb_stage 
+not to be written
+mem_stage 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 5
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+32871 24
+wb_stage 
+mem_stage 
+no mem op
+0 5 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 5
+if_stage latch is empty and free
+wb_stage 
+not to be written
+mem_stage 
+ex_stage some execution occurs
+28
+when it returns zero as alu result : reg value 0
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+361091 0
+wb_stage 
+mem_stage 
+no mem op
+28 0 
+ex_stage id_stage
+id_Stage no stall
+fetches from prev latch
+print0 0
+if_stage latch is empty and free
+inst.fetch occurs
+5570595 4
+wb_stage 
+to be written
+write_here from reg
+mem_stage 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 5
+id_stage
+id_Stage no stall
+fetches from prev latch
+print5 0
+if_stage latch is empty and free
+inst.fetch occurs
+165987 8
+wb_stage 
+mem_stage 
+to be read from mem
+0 5 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 5
+id_stage
+id_Stage no stall
+fetches from prev latch
+print5 5
+if_stage latch is empty and free
+inst.fetch occurs
+1377555 12
+wb_stage 
+to be written
+write_here from mem
+mem_stage 
+to be written in mem
+0 5 
+ex_stage id_stage
+does not fetch from prev latch
+print0 5
+earlier stall and free _latch set to false
+if_stage wb_stage 
+not to be written
+mem_stage 
+ex_stage some execution occurs
+0
+when it returns zero as alu result : reg value 5
+id_stage
+id_Stage no stall
+if_stage latch is empty and free
+inst.fetch occurs
+32871 24
+
+Final state of registers:
+x 0:        0	x 1:        0	x 2:        0	x 3:        0
+x 4:        0	x 5:        0	x 6:        0	x 7:        0
+x 8:        0	x 9:        0	x10:        0	x11:        0
+x12:        0	x13:        0	x14:        0	x15:        0
+x16:        0	x17:        0	x18:        0	x19:        0
+x20:        0	x21:        0	x22:        0	x23:        0
+x24:        0	x25:        0	x26:        0	x27:        0
+x28:        0	x29:        0	x30:        0	x31:        0
+lb x5 0 x11         |IF  |ID  |EX  |DM  |WB  |-   |    |IF  |ID  |EX  |DM  |WB  |-   |    |IF  |ID  |EX  |DM  |WB  |-   |
+sb x5 0 x10         |-   |IF  |ID  |EX  |DM  |WB  |-   |    |IF  |ID  |EX  |DM  |WB  |-   |    |IF  |ID  |EX  |DM  |WB  |
+beq x5 x0 16        |-   |    |IF  |ID  |-   |EX  |DM  |WB  |-   |IF  |ID  |-   |EX  |DM  |WB  |-   |IF  |ID  |-   |EX  |
+addi x10 x10 1      |-   |    |    |IF  |-   |    |    |    |    |    |IF  |-   |    |    |    |    |    |IF  |-   |    |
+addi x11 x11 1      |
+jal x0 -20          |
+jalr x0 x1 0        |-   |    |    |    |    |IF  |ID  |EX  |DM  |WB  |-   |    |IF  |ID  |EX  |DM  |WB  |-   |    |IF  |

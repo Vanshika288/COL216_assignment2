@@ -87,7 +87,6 @@ private:
     vector<pair<int,pair<int,int>>> instr_memory;
     vector<pair<int,pair<int,int>>> instr_write;
 
-    map<int,vector<pair<string,int>>>table;
 
 public:
     Pipeline(bool enableForwarding);

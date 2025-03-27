@@ -3,7 +3,7 @@ addi x6 x0 10; ;IF;ID;EX;MEM;WB
 sw x6 8 x10; ; ;IF;ID;-;-;EX;MEM;WB
 lw x5 8 x10; ; ; ;IF;-;-;ID;EX;MEM;WB
 add x7 x5 x5; ; ; ; ; ; ;IF;ID;-;-;EX;MEM;WB
-addi x8 x7 1; ; ; ; ; ; ; ;IF;-;-;ID;-;-;EX;MEM;WB
+addi x8 x7 5; ; ; ; ; ; ; ;IF;-;-;ID;-;-;EX;MEM;WB
 sw x8 12 x10; ; ; ; ; ; ; ; ; ; ;IF;-;-;ID;-;-;EX;MEM;WB
 lw x9 12 x10; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;-;-;ID;EX;MEM;WB
 add x11 x9 x6; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;-;-;EX;MEM;WB

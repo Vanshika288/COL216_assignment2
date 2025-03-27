@@ -7,17 +7,9 @@
 
 Pipeline::Pipeline(bool forwarding) : forwardingEnabled(forwarding)
 {
-    // reg = new Registers();
-    // alu = new ALU();
 
-    // No need to allocate with `new` since objects are already initialized
 }
 
-// REMOVE THIS - NO NEED FOR A DESTRUCTOR
-// Pipeline::~Pipeline() {
-//     delete registers;
-//     delete alu;
-// }
 
 void Pipeline::loadInstructions(string filename)
 {
@@ -67,31 +59,24 @@ void Pipeline::runPipeline(int cycles)
         ID_stage(cycle);  // Decode stage
         IF_stage(cycle);  // Fetch stage
 
-        // Print the pipeline state
-        // printPipeline(cycle + 1);
+       
     }
 }
 
 // IF_stage: Fetch stage
 void Pipeline::IF_stage(int cycle)
 {
-    cout << "if_stage ";
     if (if_id.free_latch)
     {
-        cout << "latch is empty and free" << endl;
         if (pc / 4 >= instructionMemory.size())
         {
             if_id.instruction = 0;
             if_id.pc = -1;
             return;
         }
-        cout << "inst.fetch occurs" << endl;
         if_id.instruction = instructionMemory[pc / 4];
-        cout << if_id.instruction << " " << pc << endl;
         if_id.pc = pc;
         pc += 4;
-        // instr_fetch.push_back(cycle);
-        table[(if_id.pc) / 4].push_back({"IF", cycle});
         instr_fetch.push_back({cycle, {(if_id.pc) / 4, 1}});
     }
     else
@@ -104,7 +89,6 @@ void Pipeline::IF_stage(int cycle)
 // ID_stage: Decode stage
 void Pipeline::ID_stage(int cycle)
 {
-    cout << "id_stage" << endl;
     uint32_t previous_opcode = id_ex.opcode;
     // jalr and jal and bne and beq logics :
 
@@ -127,7 +111,6 @@ void Pipeline::ID_stage(int cycle)
     bool earlier_stall = false;
     if (!ID_stall)
     {
-        cout << "id_Stage no stall" << endl;
         if_id.free_latch = true;
         if (if_id.instruction == 0)
         {
@@ -145,7 +128,6 @@ void Pipeline::ID_stage(int cycle)
             id_ex.data2 = 0;
             return;
         }
-        cout << "fetches from prev latch" << endl;
         // take from previous latch
 
         // initialise everything to zero.
@@ -171,18 +153,14 @@ void Pipeline::ID_stage(int cycle)
         switch (id_ex.opcode)
         {
         case 0x33: // add subt etc. // R type
-            cout << "it's add instr" << endl;
-            cout << "intruction" << if_id.instruction << endl;
             id_ex.rs1 = (if_id.instruction >> 15) & 0x1F;
             id_ex.rs2 = (if_id.instruction >> 20) & 0x1F;
             id_ex.rd = (if_id.instruction >> 7) & 0x1F;
-            cout << "register values of add instr : " << id_ex.rs1 << " " << id_ex.rs2 << " " << id_ex.rd << endl;
             id_ex.func3 = (if_id.instruction >> 12) & 0x7;
             id_ex.func7 = (if_id.instruction >> 25) & 0x7F;
             break;
 
         case 0x13: // ADDI-type instruction (I-type)
-            cout << "I-type instruction recognized" << endl;
 
             id_ex.rs1 = (if_id.instruction >> 15) & 0x1F;  // Extract rs1 (bits 19-15)
             id_ex.rd = (if_id.instruction >> 7) & 0x1F;    // Extract rd (bits 11-7)
@@ -190,9 +168,7 @@ void Pipeline::ID_stage(int cycle)
 
             if (id_ex.func3 == 0x1)
             { // SLLI
-                cout << "SLLI instruction recognized" << endl;
                 id_ex.imm = (if_id.instruction >> 20) & 0x1F; // Extract shamt (bits 24-20)
-                cout << "SLLI rs1: " << id_ex.rs1 << ", rd: " << id_ex.rd << ", shamt: " << id_ex.imm << endl;
             }
             else if (id_ex.func3 == 0x5)
             {                                                   // SRLI or SRAI
@@ -201,29 +177,23 @@ void Pipeline::ID_stage(int cycle)
 
                 if (id_ex.func7 == 0x00)
                 { // SRLI
-                    cout << "SRLI instruction recognized" << endl;
-                    cout << "SRLI rs1: " << id_ex.rs1 << ", rd: " << id_ex.rd << ", shamt: " << id_ex.imm << endl;
                 }
                 else if (id_ex.func7 == 0x10)
                 { // SRAI
-                    cout << "SRAI instruction recognized" << endl;
                     // Sign-extend the shift amount if MSB (bit 4) is 1
                     if (id_ex.imm & 0x10)
                     {
                         id_ex.imm |= 0xFFFFFFE0; // Extend using 5-bit signed immediate
                     }
-                    cout << "SRAI rs1: " << id_ex.rs1 << ", rd: " << id_ex.rd << ", shamt: " << id_ex.imm << endl;
                 }
             }
             else if (id_ex.func3 == 0x0)
             { // ADDI
-                cout << "ADDI instruction recognized" << endl;
                 id_ex.imm = (int32_t)(if_id.instruction >> 20) & 0xFFF; // Extract 12-bit immediate
                 if (if_id.instruction & 0x80000000)
                 {                            // Check sign bit (bit 31)
                     id_ex.imm |= 0xFFFFF000; // Sign-extend to 32 bits
                 }
-                cout << "ADDI rs1: " << id_ex.rs1 << ", rd: " << id_ex.rd << ", imm: " << id_ex.imm << endl;
             }
             break;
 
@@ -275,80 +245,26 @@ void Pipeline::ID_stage(int cycle)
                 id_ex.imm |= 0xFFE00000;
             break;
         case 0x17: // U-type (AUIPC)
-            cout << "AUIPC instruction recognised" << endl;
             id_ex.rd = (if_id.instruction >> 7) & 0x1F;
             id_ex.imm = if_id.instruction & 0xFFFFF000; // Upper 20 bits
             // No sign extension required
-            cout << "AUIPC rd: " << id_ex.rd << ", imm: " << id_ex.imm << endl;
             break;
-            // case U_TYPE_OPCODE:  // Replace with actual U-type opcode //for lui type
-            //     id_ex.rd = (if_id.instruction >> 7) & 0x1F;
-            //     id_ex.imm = if_id.instruction & 0xFFFFF000;  // Upper 20 bits
-            //     break;
 
         default:
             printf("Unknown opcode: 0x%x\n", id_ex.opcode);
             break;
         }
 
-        // Load data from registers
-        // id_ex.data1 = reg.read(id_ex.rs1);
-        // id_ex.data2 = reg.read(id_ex.rs2);
-
-        // Sign-extend immediate (depends on opcode)
-        // if (id_ex.opcode != 0x17){
-        //     id_ex.imm = signExtend(if_id.instruction);
-        // }
-        // cout << id_ex.data1 << " " << id_ex.data2 << " " << id_ex.imm << endl;
         // Set control signals
         controlUnit.setControl(id_ex.opcode, id_ex.func3);
         id_ex.control = controlUnit;
 
-        // if (id_ex.opcode == 0x67)
-        // {
-        //     // jalr type
-        //     id_ex.pc_new = reg.read(id_ex.rs1) + id_ex.imm;
-        // }
-        // else if (id_ex.opcode == 0x6F)
-        // {
-        //     // jal type
-        //     id_ex.pc_new = id_ex.pc + id_ex.imm;
-        // }
-        // else if (id_ex.opcode == 0x63)
-        // {
-        //     int val1 = reg.read(id_ex.rs1);
-        //     int val2 = reg.read(id_ex.rs2);
-        //     if (id_ex.func3 == 1)
-        //     {
-        //         // bne
-        //         if (val1 != val2)
-        //         {
-        //             id_ex.pc_new = id_ex.pc + id_ex.imm;
-        //         }
-        //         else
-        //         {
-        //             id_ex.pc_new = id_ex.pc + 4;
-        //         }
-        //     }
-        //     else if (id_ex.func3 == 0)
-        //     {
-        //         if (val1 == val2)
-        //         {
-        //             id_ex.pc_new = id_ex.pc + id_ex.imm;
-        //         }
-        //         else
-        //         {
-        //             id_ex.pc_new = id_ex.pc + 4;
-        //         }
-        //     }
-        // }
+        
     }
     else
     {
-        cout << "does not fetch from prev latch" << endl;
         earlier_stall = true;
     }
-    cout << "print" << ex_mem.rd << " " << mem_wb.rd << endl;
 
     if (forwardingEnabled)
     {
@@ -358,13 +274,8 @@ void Pipeline::ID_stage(int cycle)
 
         if (id_ex.opcode == 0x63 || id_ex.opcode == 0x67 || id_ex.opcode == 0x6F)
         {
-            if (id_ex.opcode == 0x6F)
-                cout << "####jal instr####" << endl;
-            cout << cycle << " " << endl;
-            cout << ex_mem.rd << " " << id_ex.rs1 << " " << id_ex.rs2 << endl;
             if (ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs1 || ex_mem.rd == id_ex.rs2))
             {
-                cout << "first IF" << endl;
                 ID_stall = true;
                 id_ex.no_op = true;
                 id_ex.forwardA = 0;
@@ -373,7 +284,6 @@ void Pipeline::ID_stage(int cycle)
             }
             else if (mem_wb.rd != 0 && mem_wb.control.regWrite && (mem_wb.rd == id_ex.rs1 || mem_wb.rd == id_ex.rs2))
             {
-                cout << "second IF" << endl;
                 if (mem_wb.opcode == 0x03)
                 {
                     ID_stall = true;
@@ -384,7 +294,6 @@ void Pipeline::ID_stage(int cycle)
                 }
                 else
                 {
-                    cout << "ELSE fnwontnawg" << endl;
                     ID_stall = false;
                     id_ex.no_op = false;
                     id_ex.forwardA = 0;
@@ -402,7 +311,6 @@ void Pipeline::ID_stage(int cycle)
             }
             else
             {
-                cout << "should have gone hereeeee" << endl;
                 ID_stall = false;
                 id_ex.no_op = false;
                 id_ex.forwardA = 0;
@@ -503,72 +411,23 @@ void Pipeline::ID_stage(int cycle)
     {
         if (mem_wb.rd != 0 && mem_wb.control.regWrite && (mem_wb.rd == id_ex.rs1 || mem_wb.rd == id_ex.rs2))
         {
-            // if (forwardingEnabled)
-            // {
-            //     if (mem_wb.rd == id_ex.rs1)
-            //     {
-            //         id_ex.forwardA = 1;
-            //     }
-            //     if (mem_wb.rd == id_ex.rs2)
-            //     {
-            //         id_ex.forwardB = 1;
-            //     }
-            // }
-            // else
-            //{
+            
             id_ex.forwardA = 0;
             id_ex.forwardB = 0;
             ID_stall = true;
             id_ex.no_op = true;
-            //}
+            
         }
         else if (ex_mem.rd != 0 && ex_mem.control.regWrite && (ex_mem.rd == id_ex.rs1 || ex_mem.rd == id_ex.rs2))
         {
-            // if (forwardingEnabled)
-            // {
-            //     if (ex_mem.rd == id_ex.rs1)
-            //     {
-            //         if (previous_opcode == 0x03){
-            //             ID_stall = true;
-            //             id_ex.no_op = true;
-            //         }
-            //         else {
-            //             id_ex.forwardA = 2;
-            //         }
-            //     }
-            //     else {
-            //         id_ex.forwardA = 0;
-            //     }
-            //     if (ex_mem.rd == id_ex.rs2)
-            //     {
-            //         if (previous_opcode == 0x03){
-            //             if (id_ex.opcode == 0x23){
-            //                 ex_mem.mem_forward = true;  // for store word
-            //             }
-            //             else {
-            //                 ID_stall = true;
-            //                 id_ex.no_op = true;
-            //             }
-            //         }
-            //         else {
-            //             id_ex.forwardB = 2;
-            //         }
-            //     }
-            //     else {
-            //         id_ex.forwardB = 0;
-            //     }
-            // }
-            // else
-            //{
+            
             id_ex.forwardA = 0;
             id_ex.forwardB = 0;
             ID_stall = true;
             id_ex.no_op = true;
-            //}
         }
         else
         {
-            cout << "no stalling" << endl;
             id_ex.data1 = reg.read(id_ex.rs1);
             id_ex.data2 = reg.read(id_ex.rs2);
 
@@ -579,7 +438,6 @@ void Pipeline::ID_stage(int cycle)
 
     if (!ID_stall)
     {
-        cout << "helloooooo ID no stall toh true h" << endl;
         if (id_ex.opcode == 0x67)
         {
             // jalr type
@@ -587,7 +445,6 @@ void Pipeline::ID_stage(int cycle)
         }
         if (id_ex.opcode == 0x6F)
         {
-            cout << "jalr instr. is recogniseddddd" << endl;
 
             id_ex.pc_new = id_ex.pc + id_ex.imm;
         }
@@ -645,15 +502,10 @@ void Pipeline::ID_stage(int cycle)
 
     if (!(earlier_stall))
     {
-        cout << "go hereeeeee" << endl;
-        // instr_decode.push_back(cycle);
-        table[(id_ex.pc) / 4].push_back({"ID", cycle});
         instr_decode.push_back({cycle, {(id_ex.pc) / 4, 1}});
     }
     if (earlier_stall)
     {
-        cout << "should not got hereeeee" << endl;
-        cout << "earlier stall and free _latch set to false" << endl;
         if_id.free_latch = false;
         instr_decode.push_back({cycle, {(id_ex.pc) / 4, 0}});
     }
@@ -662,7 +514,6 @@ void Pipeline::ID_stage(int cycle)
 // EX_stage: Execute stage
 void Pipeline::EX_stage(int cycle)
 {
-    cout << "ex_stage ";
     if (id_ex.no_op == true)
     {
         ex_mem.pc = 0;
@@ -674,15 +525,6 @@ void Pipeline::EX_stage(int cycle)
         ex_mem.func3 = 0;
         return;
     }
-
-    // // Perform ALU operation
-    // if (id_ex.control.aluOp) {
-    //     ex_mem.aluResult = alu.compute(id_ex.opcode, id_ex.func3, id_ex.func7, id_ex.data1, id_ex.data2, id_ex.imm);
-    // } else {
-    //     ex_mem.aluResult = 0;
-    // }
-
-    // Perform ALU operation based on control signals
 
     if (forwardingEnabled)
     {
@@ -704,7 +546,6 @@ void Pipeline::EX_stage(int cycle)
         }
     }
 
-    cout << "some execution occurs" << endl;
     alu.execute(id_ex.control.aluOp, id_ex.data1, id_ex.control.aluSrc ? id_ex.imm : id_ex.data2);
     if (id_ex.opcode == 0x6F || id_ex.opcode == 0x67)
     {
@@ -715,10 +556,8 @@ void Pipeline::EX_stage(int cycle)
         alu.result = id_ex.pc + id_ex.imm;
     }
     ex_mem.aluResult = alu.result;
-    cout << ex_mem.aluResult << endl;
     // Pass data and control to next stage
     ex_mem.rd = id_ex.rd;
-    cout << "when it returns zero as alu result : reg value " << ex_mem.rd << endl;
     ex_mem.data2 = id_ex.data2;
     ex_mem.control = id_ex.control;
     ex_mem.no_op = false;
@@ -727,14 +566,12 @@ void Pipeline::EX_stage(int cycle)
     ex_mem.mem_forward = id_ex.mem_forward;
     ex_mem.opcode = id_ex.opcode;
     ex_mem.func3 = id_ex.func3;
-    table[(ex_mem.pc) / 4].push_back({"EX", cycle});
     instr_execute.push_back({cycle, {(ex_mem.pc) / 4, 1}});
 }
 
 // MEM_stage: Memory stage
 void Pipeline::MEM_stage(int cycle)
 {
-    cout << "mem_stage " << endl;
     if (ex_mem.no_op == true)
     {
         mem_wb.pc = 0;
@@ -756,31 +593,25 @@ void Pipeline::MEM_stage(int cycle)
     // Memory operations
     if (ex_mem.control.memRead)
     {
-        cout << "to be read from mem" << endl;
         mem_wb.memData = memory[ex_mem.aluResult];
         if (mem_wb.func3 == 0)
         {
-            cout << "load byte instr." << endl;
             mem_wb.memData = mem_wb.memData & 0xFF;
         }
         else if (mem_wb.func3 == 1)
         {
-            cout << "load halfword instr." << endl;
             mem_wb.memData = mem_wb.memData & 0xFFFF;
         }
         else
         {
-            cout << "load word instr." << endl;
         }
     }
     else if (ex_mem.control.memWrite)
     {
-        cout << "to be written in mem" << endl;
         memory[ex_mem.aluResult] = ex_mem.data2;
     }
     else
     {
-        cout << "no mem op" << endl;
         mem_wb.memData = 0;
     }
 
@@ -788,20 +619,17 @@ void Pipeline::MEM_stage(int cycle)
     mem_wb.aluResult = ex_mem.aluResult;
     mem_wb.rd = ex_mem.rd;
     mem_wb.control = ex_mem.control;
-    cout << mem_wb.aluResult << " " << mem_wb.rd << " " << endl;
     mem_wb.no_op = false;
     // instr_memory.push_back(cycle);
     mem_wb.pc = ex_mem.pc;
     mem_wb.opcode = ex_mem.opcode;
     mem_wb.func3 = ex_mem.func3;
-    table[(mem_wb.pc) / 4].push_back({"DM", cycle});
     instr_memory.push_back({cycle, {(mem_wb.pc) / 4, 1}});
 }
 
 // WB_stage: Write-Back stage
 void Pipeline::WB_stage(int cycle)
 {
-    cout << "wb_stage " << endl;
     if (mem_wb.no_op == true)
     {
         return;
@@ -810,25 +638,20 @@ void Pipeline::WB_stage(int cycle)
     // Write result back to the register file
     if (mem_wb.control.regWrite)
     {
-        cout << "to be written" << endl;
         if (mem_wb.control.memToReg)
         {
-            cout << "write_here from mem" << endl;
             reg.write(mem_wb.rd, mem_wb.memData);
         }
         else
         {
-            cout << "write_here from reg" << endl;
 
             reg.write(mem_wb.rd, mem_wb.aluResult);
         }
     }
     else
     {
-        cout << "not to be written" << endl;
     }
     // instr_write.push_back(cycle);
-    table[(mem_wb.pc) / 4].push_back({"WB", cycle});
     instr_write.push_back({cycle, {(mem_wb.pc) / 4, 1}});
 }
 string trim(const string &s)
@@ -855,192 +678,12 @@ void trimTrailingSemicolons(string &s)
 
 // Print pipeline state in deploy stage
 
-// void Pipeline :: printPipeline(int cycles){
-//     for (int i=0;i<instructions.size();i++){
-//         // cout<<trim(instructions[i])<<";";
-//         string s = "";
-//         s.append(trim(instructions[i]));
-//         s.push_back(';');
-//         // int cycle_to_be_printed = 0;
-
-//         int fetch_index = 0;
-//         int decode_index = 0;
-//         int ex_index = 0;
-//         int mem_index = 0;
-//         int write_index = 0;
-//         for (int j=0;j<cycles;j++){
-//             int instr_printed_in_curr_cycle = 0;
-//             if (instr_fetch[fetch_index].second.first == i){
-//                 if (instr_fetch[fetch_index].first == j){
-//                     if (instr_fetch[fetch_index].second.second == 1){
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             // cout<<"IF";
-//                             s.append("IF");
-//                         }
-//                         else {
-//                             // cout<<"/IF";
-//                             s.append("/IF");
-//                         }
-
-//                     }
-//                     else {
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             // cout<<"-";
-//                             s.append("-");
-//                         }
-//                         else {
-//                             // cout<<"/-";
-//                             s.append("/-");
-//                         }
-//                     }
-//                     instr_printed_in_curr_cycle++;
-//                     fetch_index++;
-//                 }
-//             }
-//             else {
-//                 fetch_index++;
-//             }
-//             if (instr_decode[decode_index].second.first == i){
-//                 if (instr_decode[decode_index].first == j){
-//                     if (instr_decode[decode_index].second.second == 1){
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             // cout<<"ID";
-//                             s.append("ID");
-//                         }
-//                         else {
-//                             // cout<<"/ID";
-//                             s.append("/ID");
-//                         }
-
-//                     }
-//                     else {
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             // cout<<"-";
-//                             s.append("-");
-//                         }
-//                         else {
-//                             // cout<<"/-";
-//                             s.append("/-");
-//                         }
-//                     }
-//                     instr_printed_in_curr_cycle++;
-//                     decode_index++;
-//                 }
-//             }
-//             else {
-//                 decode_index++;
-//             }
-//             if (instr_execute[ex_index].second.first == i){
-//                 if (instr_execute[ex_index].first == j){
-//                     if (instr_execute[ex_index].second.second == 1){
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             // cout<<"EX";
-//                             s.append("EX");
-//                         }
-//                         else {
-//                             // cout<<"/EX";
-//                             s.append("/EX");
-//                         }
-
-//                     }
-//                     else {
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             // cout<<"-";
-//                             s.append("-");
-//                         }
-//                         else {
-//                             // cout<<"/-";
-//                             s.append("/-");
-//                         }
-//                     }
-//                     instr_printed_in_curr_cycle++;
-//                     ex_index++;
-//                 }
-//             }
-//             else {
-//                 ex_index++;
-//             }
-//             if (instr_memory[mem_index].second.first == i){
-//                 if (instr_memory[mem_index].first == j){
-//                     if (instr_memory[mem_index].second.second == 1){
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             // cout<<"MEM";
-//                             s.append("MEM");
-//                         }
-//                         else {
-//                             // cout<<"/MEM";
-//                             s.append("/MEM");
-//                         }
-
-//                     }
-//                     else {
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             // cout<<"-";
-//                             s.append("-");
-//                         }
-//                         else {
-//                             // cout<<"/-";
-//                             s.append("/-");
-//                         }
-//                     }
-//                     instr_printed_in_curr_cycle++;
-//                     mem_index++;
-//                 }
-//             }
-//             else {
-//                 mem_index++;
-//             }
-//             if (instr_write[write_index].second.first == i){
-//                 if (instr_write[write_index].first == j){
-//                     if (instr_write[write_index].second.second == 1){
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             // cout<<"WB";
-//                             s.append("WB");
-//                         }
-//                         else {
-//                             // cout<<"/WB";
-//                             s.append("/WB");
-//                         }
-
-//                     }
-//                     else {
-//                         if (instr_printed_in_curr_cycle == 0){
-//                             // cout<<"-";
-//                             s.append("-");
-//                         }
-//                         else {
-//                             // cout<<"/-";
-//                             s.append("/-");
-//                         }
-//                     }
-//                     instr_printed_in_curr_cycle++;
-//                     write_index++;
-//                 }
-//             }
-//             else {
-//                 write_index++;
-//             }
-//             if (instr_printed_in_curr_cycle==0){
-//                 // cout<<" ";
-//                 s.append(" ");
-//             }
-//             // cout<<";"
-//             s.push_back(';');
-//         }
-//         trimTrailingSemicolons(s);
-//         cout<<s;
-//         // cout<<".";
-//         cout<<endl;
-//     }
-// }
-
-// Print pipeline state in debug stage
-
-void Pipeline ::printPipeline(int cycles)
-{
-    for (int i = 0; i < instructions.size(); i++)
-    {
-        cout << left << setw(20) << trim(instructions[i]) << "|";
+void Pipeline :: printPipeline(int cycles){
+    for (int i=0;i<instructions.size();i++){
+        // cout<<trim(instructions[i])<<";";
+        string s = "";
+        s.append(trim(instructions[i]));
+        s.push_back(';');
         // int cycle_to_be_printed = 0;
 
         int fetch_index = 0;
@@ -1048,189 +691,369 @@ void Pipeline ::printPipeline(int cycles)
         int ex_index = 0;
         int mem_index = 0;
         int write_index = 0;
-
-        for (int j = 0; j < cycles; j++)
-        {
+        for (int j=0;j<cycles;j++){
             int instr_printed_in_curr_cycle = 0;
-            if (instr_fetch[fetch_index].second.first == i)
-            {
-                if (instr_fetch[fetch_index].first == j)
-                {
-                    if (instr_fetch[fetch_index].second.second == 1)
-                    {
-                        if (instr_printed_in_curr_cycle == 0)
-                        {
-                            cout << "IF  ";
+            if (instr_fetch[fetch_index].second.first == i){
+                if (instr_fetch[fetch_index].first == j){
+                    if (instr_fetch[fetch_index].second.second == 1){
+                        if (instr_printed_in_curr_cycle == 0){
+                            // cout<<"IF";
+                            s.append("IF");
                         }
-                        else
-                        {
-                            cout << "/IF ";
+                        else {
+                            // cout<<"/IF";
+                            s.append("/IF");
                         }
+
                     }
-                    else
-                    {
-                        if (instr_printed_in_curr_cycle == 0)
-                        {
-                            cout << "-   ";
+                    else {
+                        if (instr_printed_in_curr_cycle == 0){
+                            // cout<<"-";
+                            s.append("-");
                         }
-                        else
-                        {
-                            cout << "/-  ";
+                        else {
+                            // cout<<"/-";
+                            s.append("/-");
                         }
                     }
                     instr_printed_in_curr_cycle++;
                     fetch_index++;
                 }
             }
-            else
-            {
+            else {
                 fetch_index++;
             }
-            if (instr_decode[decode_index].second.first == i)
-            {
-                if (instr_decode[decode_index].first == j)
-                {
-                    if (instr_decode[decode_index].second.second == 1)
-                    {
-                        if (instr_printed_in_curr_cycle == 0)
-                        {
-                            cout << "ID  ";
+            if (instr_decode[decode_index].second.first == i){
+                if (instr_decode[decode_index].first == j){
+                    if (instr_decode[decode_index].second.second == 1){
+                        if (instr_printed_in_curr_cycle == 0){
+                            // cout<<"ID";
+                            s.append("ID");
                         }
-                        else
-                        {
-                            cout << "/ID ";
+                        else {
+                            // cout<<"/ID";
+                            s.append("/ID");
                         }
+
                     }
-                    else
-                    {
-                        if (instr_printed_in_curr_cycle == 0)
-                        {
-                            cout << "-   ";
+                    else {
+                        if (instr_printed_in_curr_cycle == 0){
+                            // cout<<"-";
+                            s.append("-");
                         }
-                        else
-                        {
-                            cout << "/-  ";
+                        else {
+                            // cout<<"/-";
+                            s.append("/-");
                         }
                     }
                     instr_printed_in_curr_cycle++;
                     decode_index++;
                 }
             }
-            else
-            {
+            else {
                 decode_index++;
             }
-            if (instr_execute[ex_index].second.first == i)
-            {
-                if (instr_execute[ex_index].first == j)
-                {
-                    if (instr_execute[ex_index].second.second == 1)
-                    {
-                        if (instr_printed_in_curr_cycle == 0)
-                        {
-                            cout << "EX  ";
+            if (instr_execute[ex_index].second.first == i){
+                if (instr_execute[ex_index].first == j){
+                    if (instr_execute[ex_index].second.second == 1){
+                        if (instr_printed_in_curr_cycle == 0){
+                            // cout<<"EX";
+                            s.append("EX");
                         }
-                        else
-                        {
-                            cout << "/EX ";
+                        else {
+                            // cout<<"/EX";
+                            s.append("/EX");
                         }
+
                     }
-                    else
-                    {
-                        if (instr_printed_in_curr_cycle == 0)
-                        {
-                            cout << "-   ";
+                    else {
+                        if (instr_printed_in_curr_cycle == 0){
+                            // cout<<"-";
+                            s.append("-");
                         }
-                        else
-                        {
-                            cout << "/-  ";
+                        else {
+                            // cout<<"/-";
+                            s.append("/-");
                         }
                     }
                     instr_printed_in_curr_cycle++;
                     ex_index++;
                 }
             }
-            else
-            {
+            else {
                 ex_index++;
             }
-            if (instr_memory[mem_index].second.first == i)
-            {
-                if (instr_memory[mem_index].first == j)
-                {
-                    if (instr_memory[mem_index].second.second == 1)
-                    {
-                        if (instr_printed_in_curr_cycle == 0)
-                        {
-                            cout << "MEM ";
+            if (instr_memory[mem_index].second.first == i){
+                if (instr_memory[mem_index].first == j){
+                    if (instr_memory[mem_index].second.second == 1){
+                        if (instr_printed_in_curr_cycle == 0){
+                            // cout<<"MEM";
+                            s.append("MEM");
                         }
-                        else
-                        {
-                            cout << "/MEM" << "|";
+                        else {
+                            // cout<<"/MEM";
+                            s.append("/MEM");
                         }
+
                     }
-                    else
-                    {
-                        if (instr_printed_in_curr_cycle == 0)
-                        {
-                            cout << "-   ";
+                    else {
+                        if (instr_printed_in_curr_cycle == 0){
+                            // cout<<"-";
+                            s.append("-");
                         }
-                        else
-                        {
-                            cout << "/-  ";
+                        else {
+                            // cout<<"/-";
+                            s.append("/-");
                         }
                     }
                     instr_printed_in_curr_cycle++;
                     mem_index++;
                 }
             }
-            else
-            {
+            else {
                 mem_index++;
             }
-            if (instr_write[write_index].second.first == i)
-            {
-                if (instr_write[write_index].first == j)
-                {
-                    if (instr_write[write_index].second.second == 1)
-                    {
-                        if (instr_printed_in_curr_cycle == 0)
-                        {
-                            cout << "WB  ";
+            if (instr_write[write_index].second.first == i){
+                if (instr_write[write_index].first == j){
+                    if (instr_write[write_index].second.second == 1){
+                        if (instr_printed_in_curr_cycle == 0){
+                            // cout<<"WB";
+                            s.append("WB");
                         }
-                        else
-                        {
-                            cout << "/WB ";
+                        else {
+                            // cout<<"/WB";
+                            s.append("/WB");
                         }
+
                     }
-                    else
-                    {
-                        if (instr_printed_in_curr_cycle == 0)
-                        {
-                            cout << "-   ";
+                    else {
+                        if (instr_printed_in_curr_cycle == 0){
+                            // cout<<"-";
+                            s.append("-");
                         }
-                        else
-                        {
-                            cout << "/-  ";
+                        else {
+                            // cout<<"/-";
+                            s.append("/-");
                         }
                     }
                     instr_printed_in_curr_cycle++;
                     write_index++;
                 }
             }
-            else
-            {
+            else {
                 write_index++;
             }
-            if (instr_printed_in_curr_cycle == 0)
-            {
-                cout << "    ";
+            if (instr_printed_in_curr_cycle==0){
+                // cout<<" ";
+                s.append(" ");
             }
-            cout << "|";
+            // cout<<";"
+            s.push_back(';');
         }
-        cout << endl;
+        trimTrailingSemicolons(s);
+        cout<<s;
+        // cout<<".";
+        cout<<endl;
     }
 }
+
+// Print pipeline state in debug stage
+
+// void Pipeline ::printPipeline(int cycles)
+// {
+//     for (int i = 0; i < instructions.size(); i++)
+//     {
+//         cout << left << setw(20) << trim(instructions[i]) << "|";
+//         // int cycle_to_be_printed = 0;
+
+//         int fetch_index = 0;
+//         int decode_index = 0;
+//         int ex_index = 0;
+//         int mem_index = 0;
+//         int write_index = 0;
+
+//         for (int j = 0; j < cycles; j++)
+//         {
+//             int instr_printed_in_curr_cycle = 0;
+//             if (instr_fetch[fetch_index].second.first == i)
+//             {
+//                 if (instr_fetch[fetch_index].first == j)
+//                 {
+//                     if (instr_fetch[fetch_index].second.second == 1)
+//                     {
+//                         if (instr_printed_in_curr_cycle == 0)
+//                         {
+//                             cout << "IF  ";
+//                         }
+//                         else
+//                         {
+//                             cout << "/IF ";
+//                         }
+//                     }
+//                     else
+//                     {
+//                         if (instr_printed_in_curr_cycle == 0)
+//                         {
+//                             cout << "-   ";
+//                         }
+//                         else
+//                         {
+//                             cout << "/-  ";
+//                         }
+//                     }
+//                     instr_printed_in_curr_cycle++;
+//                     fetch_index++;
+//                 }
+//             }
+//             else
+//             {
+//                 fetch_index++;
+//             }
+//             if (instr_decode[decode_index].second.first == i)
+//             {
+//                 if (instr_decode[decode_index].first == j)
+//                 {
+//                     if (instr_decode[decode_index].second.second == 1)
+//                     {
+//                         if (instr_printed_in_curr_cycle == 0)
+//                         {
+//                             cout << "ID  ";
+//                         }
+//                         else
+//                         {
+//                             cout << "/ID ";
+//                         }
+//                     }
+//                     else
+//                     {
+//                         if (instr_printed_in_curr_cycle == 0)
+//                         {
+//                             cout << "-   ";
+//                         }
+//                         else
+//                         {
+//                             cout << "/-  ";
+//                         }
+//                     }
+//                     instr_printed_in_curr_cycle++;
+//                     decode_index++;
+//                 }
+//             }
+//             else
+//             {
+//                 decode_index++;
+//             }
+//             if (instr_execute[ex_index].second.first == i)
+//             {
+//                 if (instr_execute[ex_index].first == j)
+//                 {
+//                     if (instr_execute[ex_index].second.second == 1)
+//                     {
+//                         if (instr_printed_in_curr_cycle == 0)
+//                         {
+//                             cout << "EX  ";
+//                         }
+//                         else
+//                         {
+//                             cout << "/EX ";
+//                         }
+//                     }
+//                     else
+//                     {
+//                         if (instr_printed_in_curr_cycle == 0)
+//                         {
+//                             cout << "-   ";
+//                         }
+//                         else
+//                         {
+//                             cout << "/-  ";
+//                         }
+//                     }
+//                     instr_printed_in_curr_cycle++;
+//                     ex_index++;
+//                 }
+//             }
+//             else
+//             {
+//                 ex_index++;
+//             }
+//             if (instr_memory[mem_index].second.first == i)
+//             {
+//                 if (instr_memory[mem_index].first == j)
+//                 {
+//                     if (instr_memory[mem_index].second.second == 1)
+//                     {
+//                         if (instr_printed_in_curr_cycle == 0)
+//                         {
+//                             cout << "MEM ";
+//                         }
+//                         else
+//                         {
+//                             cout << "/MEM" << "|";
+//                         }
+//                     }
+//                     else
+//                     {
+//                         if (instr_printed_in_curr_cycle == 0)
+//                         {
+//                             cout << "-   ";
+//                         }
+//                         else
+//                         {
+//                             cout << "/-  ";
+//                         }
+//                     }
+//                     instr_printed_in_curr_cycle++;
+//                     mem_index++;
+//                 }
+//             }
+//             else
+//             {
+//                 mem_index++;
+//             }
+//             if (instr_write[write_index].second.first == i)
+//             {
+//                 if (instr_write[write_index].first == j)
+//                 {
+//                     if (instr_write[write_index].second.second == 1)
+//                     {
+//                         if (instr_printed_in_curr_cycle == 0)
+//                         {
+//                             cout << "WB  ";
+//                         }
+//                         else
+//                         {
+//                             cout << "/WB ";
+//                         }
+//                     }
+//                     else
+//                     {
+//                         if (instr_printed_in_curr_cycle == 0)
+//                         {
+//                             cout << "-   ";
+//                         }
+//                         else
+//                         {
+//                             cout << "/-  ";
+//                         }
+//                     }
+//                     instr_printed_in_curr_cycle++;
+//                     write_index++;
+//                 }
+//             }
+//             else
+//             {
+//                 write_index++;
+//             }
+//             if (instr_printed_in_curr_cycle == 0)
+//             {
+//                 cout << "    ";
+//             }
+//             cout << "|";
+//         }
+//         cout << endl;
+//     }
+// }
 
 uint32_t Pipeline::signExtend(uint32_t instruction)
 {

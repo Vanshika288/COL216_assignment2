@@ -1,0 +1,6 @@
+01400513        addi x10 x0 20
+00500293        addi x5 x0 5
+008000ef        jal x1 8 <target>
+00000313        addi x6 x0 0
+005503b3        add x7 x10 x5
+00008067        jalr x0 x1 0

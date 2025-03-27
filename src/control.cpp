@@ -56,7 +56,6 @@ void Control::setControl(uint32_t opcode, uint32_t funct3) {
             default:
                 break;
             }
-            cout<<"addi  instr correctly recognised"<<endl;
             
             break;
 

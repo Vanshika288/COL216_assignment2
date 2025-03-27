@@ -82,7 +82,7 @@ void Pipeline::IF_stage(int cycle)
         if (pc / 4 >= instructionMemory.size())
         {
             if_id.instruction = 0;
-            if_id.pc = 0;
+            if_id.pc = -1;
             return;
         }
         cout << "inst.fetch occurs" << endl;
@@ -1054,7 +1054,7 @@ void Pipeline :: printPipeline(int cycles){
     }
 }
 
-// void Pipeline::printPipeline()
+// void Pipeline::printPipeline(int c)
 // {
 //     unordered_map<string, string> stageOrder = {{"IF", "ID"}, {"ID", "EX"}, {"EX", "DM"}, {"DM", "WB"}};
 

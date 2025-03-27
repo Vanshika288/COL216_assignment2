@@ -1,0 +1,8 @@
+addi x10 x0 10;IF;ID;EX;MEM;WB
+addi x5 x0 5; ;IF;ID;EX;MEM;WB
+addi x6 x0 0; ; ;IF;ID;EX;MEM;WB
+add x7 x5 x5; ; ; ;IF;ID;EX;MEM;WB
+beq x7 x10 12 <label1>; ; ; ; ;IF;ID;-;EX;MEM;WB
+addi x6 x6 1; ; ; ; ; ;IF;-
+jal x0 -24 <main>
+addi x6 x6 5; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB

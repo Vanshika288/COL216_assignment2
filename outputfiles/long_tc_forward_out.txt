@@ -1,0 +1,40 @@
+addi x10 x0 4;IF;ID;EX;MEM;WB
+addi x5 x0 10; ;IF;ID;EX;MEM;WB
+addi x6 x0 20; ; ;IF;ID;EX;MEM;WB
+addi x7 x0 0; ; ; ;IF;ID;EX;MEM;WB
+addi x8 x0 30; ; ; ; ;IF;ID;EX;MEM;WB
+addi x9 x0 40; ; ; ; ; ;IF;ID;EX;MEM;WB
+sw x5 8 x10; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+sw x6 12 x10; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+sw x8 16 x10; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+sw x9 20 x10; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+lw x11 8 x10; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+lw x12 12 x10; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+lw x13 16 x10; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+add x14 x11 x12; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+sub x15 x14 x13; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+or x17 x16 x6; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+and x18 x17 x13; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+sw x18 24 x10; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+lw x19 24 x10; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+beq x19 x18 12 <label1>; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;-;-;EX;MEM;WB
+addi x7 x0 1; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;-;-
+jal x0 -88 <main>
+addi x7 x0 2; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+add x20 x7 x5; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+bne x20 x6 12 <label2>; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;-;EX;MEM;WB
+addi x21 x0 0; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;-
+jal x0 -108 <main>
+addi x21 x0 1; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+auipc x22 0x0 <main>; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+addi x22 x22 32; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+jalr x0 x22 0; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;-;EX;MEM;WB
+addi x23 x0 -1; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;-
+slt x24 x5 x6
+addi x25 x0 0
+jal x0 -144 <main>
+addi x25 x0 5
+jal x1 8 <return_point>; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+addi x26 x0 0; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF; ; ; ;IF;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX
+add x27 x25 x5; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID
+jalr x0 x1 0; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB

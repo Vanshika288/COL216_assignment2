@@ -1,0 +1,20 @@
+00c00293        addi x5 x0 12
+01900313        addi x6 x0 25
+ffb00393        addi x7 x0 -5
+00a00413        addi x8 x0 10
+00000493        addi x9 x0 0
+0062f533        and x10 x5 x6
+0072f5b3        and x11 x5 x7
+00947633        and x12 x8 x9
+0062e6b3        or x13 x5 x6
+0092e733        or x14 x5 x9
+0083e7b3        or x15 x7 x8
+01000817        auipc x16 0x1000
+00000897        auipc x17 0x0
+0062a933        slt x18 x5 x6
+0053a9b3        slt x19 x7 x5
+00832a33        slt x20 x6 x8
+0094aab3        slt x21 x9 x9
+0052fb33        and x22 x5 x5
+0052ebb3        or x23 x5 x5
+0054ac33        slt x24 x9 x5

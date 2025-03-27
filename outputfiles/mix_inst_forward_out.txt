@@ -1,0 +1,24 @@
+addi x10 x0 4;IF;ID;EX;MEM;WB
+addi x5 x0 10; ;IF;ID;EX;MEM;WB
+addi x6 x0 20; ; ;IF;ID;EX;MEM;WB
+addi x7 x0 0; ; ; ;IF;ID;EX;MEM;WB
+sw x5 8 x10; ; ; ; ;IF;ID;EX;MEM;WB
+sw x6 12 x10; ; ; ; ; ;IF;ID;EX;MEM;WB
+lw x8 8 x10; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+lw x9 12 x10; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+add x11 x8 x9; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+sw x13 16 x10; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+lw x14 16 x10; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+beq x14 x13 12 <label1>; ; ; ; ; ; ; ; ; ; ; ;IF;ID;-;-;EX;MEM;WB
+addi x7 x0 1; ; ; ; ; ; ; ; ; ; ; ; ;IF;-;-
+jal x0 -60 <end>
+addi x7 x0 2; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+add x15 x7 x5; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+bne x15 x6 12 <label2>; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;-;EX;MEM;WB
+addi x16 x0 0; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;-
+jal x0 -80 <end>
+addi x16 x0 1; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+jal x1 8 <target>; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;WB
+addi x17 x0 0; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF; ; ; ;IF;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX;MEM
+add x18 x16 x5; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX
+jalr x0 x1 0; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;IF;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID;EX;MEM;IF/WB;ID

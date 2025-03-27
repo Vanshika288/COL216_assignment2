@@ -1,4 +1,0 @@
-addi x10 x0 4
-addi x6 x0 10
-sw x6 8 x10
-lw x5 8 x10

@@ -1,0 +1,10 @@
+# Ignore all .o (object) files in src/
+src/*.o
+
+# Ignore the executables
+src/noforward
+src/forward
+
+# Ignore the helper files generated
+src/assembly_code.txt
+src/machine_code.txt

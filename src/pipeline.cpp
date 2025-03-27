@@ -170,9 +170,21 @@ void Pipeline::ID_stage(int cycle)
             id_ex.rs1 = (if_id.instruction >> 15) & 0x1F;
             id_ex.rd = (if_id.instruction >> 7) & 0x1F;
             id_ex.func3 = (if_id.instruction >> 12) & 0x7;
-            id_ex.imm = (int32_t)(if_id.instruction >> 20) & 0xFFF; // Sign-extended 12-bit immediate
-            if (if_id.instruction & 0x80000000)                     // Sign-extension
-                id_ex.imm |= 0xFFFFF000;
+            if (id_ex.func3 == 0x1) { // SLLI
+                    cout << "SLLI instruction recognized" << endl;
+                    id_ex.imm = (if_id.instruction >> 20) ; // Extract shift amount (5-bit)
+                    cout << "SLLI rs1: " << id_ex.rs1 << ", rd: " << id_ex.rd << ", shamt: " << id_ex.imm << endl;
+            } 
+            else if (id_ex.func3==0x0)
+            { // Other I-type instructions like ADDI
+                    cout << "ADDI instruction recognized" << endl;
+                    id_ex.imm = (int32_t)(if_id.instruction >> 20) & 0xFFF; // Sign-extended 12-bit immediate
+                    if (if_id.instruction & 0x80000000) // Sign-extension
+                        id_ex.imm |= 0xFFFFF000;
+            }
+            // id_ex.imm = (int32_t)(if_id.instruction >> 20) & 0xFFF; // Sign-extended 12-bit immediate
+            // if (if_id.instruction & 0x80000000)                     // Sign-extension
+            //     id_ex.imm |= 0xFFFFF000;
             break;
         case 0x03: // load word inst // I type
             id_ex.rs1 = (if_id.instruction >> 15) & 0x1F;
@@ -243,12 +255,12 @@ void Pipeline::ID_stage(int cycle)
         // id_ex.data2 = reg.read(id_ex.rs2);
 
         // Sign-extend immediate (depends on opcode)
-        if (id_ex.opcode != 0x17){
-            id_ex.imm = signExtend(if_id.instruction);
-        }
+        // if (id_ex.opcode != 0x17){
+        //     id_ex.imm = signExtend(if_id.instruction);
+        // }
         // cout << id_ex.data1 << " " << id_ex.data2 << " " << id_ex.imm << endl;
         // Set control signals
-        controlUnit.setControl(id_ex.opcode);
+        controlUnit.setControl(id_ex.opcode,id_ex.func3);
         id_ex.control = controlUnit;
 
         // if (id_ex.opcode == 0x67)

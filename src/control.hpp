@@ -13,7 +13,7 @@ public:
     uint8_t aluOp;    // ALU operation control
 
     Control();                 // Constructor to initialize signals
-    void setControl(uint32_t opcode);  // Set control signals based on opcode
+    void setControl(uint32_t opcode,uint32_t funct3);  // Set control signals based on opcode
 };
 
 #endif // CONTROL_HPP

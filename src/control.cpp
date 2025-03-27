@@ -12,7 +12,7 @@ Control::Control() {
 }
 
 // Set control signals based on opcode
-void Control::setControl(uint32_t opcode) {
+void Control::setControl(uint32_t opcode, uint32_t funct3) {
     switch (opcode) {
         case 0x33:  // R-type (ADD)
             regWrite = true;
@@ -23,14 +23,32 @@ void Control::setControl(uint32_t opcode) {
             aluOp = 0;
             break;
 
-        case 0x13:  // I-type (ADDI, ANDI, ORI, etc.)
-            cout<<"addi instr correctly recognised"<<endl;
-            regWrite = true;
-            aluSrc = true;
-            memRead = false;
-            memWrite = false;
-            memToReg = false;
-            aluOp = 0;
+        case 0x13:  // I-type (ADDI, ANDI, ORI, etc.) 
+            switch (funct3)
+            {
+            case 0:
+                regWrite = true;
+                aluSrc = true;
+                memRead = false;
+                memWrite = false;
+                memToReg = false;
+                aluOp = 0;
+                /* code */
+                break;
+            case 1:
+                regWrite = true;
+                aluSrc = true;
+                memRead = false;
+                memWrite = false;
+                memToReg = false;
+                aluOp = 6;
+                /* code */
+                break;
+            default:
+                break;
+            }
+            cout<<"addi  instr correctly recognised"<<endl;
+            
             break;
 
         case 0x03:  // Load (LW)

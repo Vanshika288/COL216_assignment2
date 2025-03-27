@@ -48,6 +48,7 @@ struct EX_MEM {
     uint32_t data2 = 0;  //in store word the register from which we take value 
     Control control;
     bool no_op = true;
+    uint32_t func3 = 0;
 };
 
 struct MEM_WB {
@@ -58,6 +59,7 @@ struct MEM_WB {
     uint32_t rd = 0;
     Control control;
     bool no_op = true;
+    uint32_t func3 = 0;
 };
 
 class Pipeline {

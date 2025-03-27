@@ -92,11 +92,11 @@ void Pipeline::IF_stage(int cycle)
         pc += 4;
         // instr_fetch.push_back(cycle);
         table[(if_id.pc) / 4].push_back({"IF", cycle});
-        instr_fetch.push_back({cycle, {(if_id.pc) / 4,1}});
+        instr_fetch.push_back({cycle, {(if_id.pc) / 4, 1}});
     }
     else
     {
-        instr_fetch.push_back({cycle,{(if_id.pc) / 4,0}});
+        instr_fetch.push_back({cycle, {(if_id.pc) / 4, 0}});
         return;
     }
 }
@@ -165,27 +165,52 @@ void Pipeline::ID_stage(int cycle)
             id_ex.func7 = (if_id.instruction >> 25) & 0x7F;
             break;
 
-        case 0x13: // addi type inst. //I type
-            cout << "addi instr. recognised " << endl;
-            id_ex.rs1 = (if_id.instruction >> 15) & 0x1F;
-            id_ex.rd = (if_id.instruction >> 7) & 0x1F;
-            id_ex.func3 = (if_id.instruction >> 12) & 0x7;
-            if (id_ex.func3 == 0x1) { // SLLI
-                    cout << "SLLI instruction recognized" << endl;
-                    id_ex.imm = (if_id.instruction >> 20) ; // Extract shift amount (5-bit)
-                    cout << "SLLI rs1: " << id_ex.rs1 << ", rd: " << id_ex.rd << ", shamt: " << id_ex.imm << endl;
-            } 
-            else if (id_ex.func3==0x0)
-            { // Other I-type instructions like ADDI
-                    cout << "ADDI instruction recognized" << endl;
-                    id_ex.imm = (int32_t)(if_id.instruction >> 20) & 0xFFF; // Sign-extended 12-bit immediate
-                    if (if_id.instruction & 0x80000000) // Sign-extension
-                        id_ex.imm |= 0xFFFFF000;
+        case 0x13: // ADDI-type instruction (I-type)
+            cout << "I-type instruction recognized" << endl;
+
+            id_ex.rs1 = (if_id.instruction >> 15) & 0x1F;  // Extract rs1 (bits 19-15)
+            id_ex.rd = (if_id.instruction >> 7) & 0x1F;    // Extract rd (bits 11-7)
+            id_ex.func3 = (if_id.instruction >> 12) & 0x7; // Extract funct3 (bits 14-12)
+
+            if (id_ex.func3 == 0x1)
+            { // SLLI
+                cout << "SLLI instruction recognized" << endl;
+                id_ex.imm = (if_id.instruction >> 20) & 0x1F; // Extract shamt (bits 24-20)
+                cout << "SLLI rs1: " << id_ex.rs1 << ", rd: " << id_ex.rd << ", shamt: " << id_ex.imm << endl;
             }
-            // id_ex.imm = (int32_t)(if_id.instruction >> 20) & 0xFFF; // Sign-extended 12-bit immediate
-            // if (if_id.instruction & 0x80000000)                     // Sign-extension
-            //     id_ex.imm |= 0xFFFFF000;
+            else if (id_ex.func3 == 0x5)
+            {                                                       // SRLI or SRAI
+                id_ex.func7 = (if_id.instruction >> 26) & 0x3F; // Extract funct6 (bits 31-26) //it's actually func6 only
+                id_ex.imm = (if_id.instruction >> 20) & 0x1F;       // Extract shamt (bits 24-20)
+
+                if (id_ex.func7 == 0x00)
+                { // SRLI
+                    cout << "SRLI instruction recognized" << endl;
+                    cout << "SRLI rs1: " << id_ex.rs1 << ", rd: " << id_ex.rd << ", shamt: " << id_ex.imm << endl;
+                }
+                else if (id_ex.func7 == 0x10)
+                { // SRAI
+                    cout << "SRAI instruction recognized" << endl;
+                    // Sign-extend the shift amount if MSB (bit 4) is 1
+                    if (id_ex.imm & 0x10)
+                    {
+                        id_ex.imm |= 0xFFFFFFE0; // Extend using 5-bit signed immediate
+                    }
+                    cout << "SRAI rs1: " << id_ex.rs1 << ", rd: " << id_ex.rd << ", shamt: " << id_ex.imm << endl;
+                }
+            }
+            else if (id_ex.func3 == 0x0)
+            { // ADDI
+                cout << "ADDI instruction recognized" << endl;
+                id_ex.imm = (int32_t)(if_id.instruction >> 20) & 0xFFF; // Extract 12-bit immediate
+                if (if_id.instruction & 0x80000000)
+                {                            // Check sign bit (bit 31)
+                    id_ex.imm |= 0xFFFFF000; // Sign-extend to 32 bits
+                }
+                cout << "ADDI rs1: " << id_ex.rs1 << ", rd: " << id_ex.rd << ", imm: " << id_ex.imm << endl;
+            }
             break;
+
         case 0x03: // load word inst // I type
             id_ex.rs1 = (if_id.instruction >> 15) & 0x1F;
             id_ex.rd = (if_id.instruction >> 7) & 0x1F;
@@ -260,7 +285,7 @@ void Pipeline::ID_stage(int cycle)
         // }
         // cout << id_ex.data1 << " " << id_ex.data2 << " " << id_ex.imm << endl;
         // Set control signals
-        controlUnit.setControl(id_ex.opcode,id_ex.func3);
+        controlUnit.setControl(id_ex.opcode, id_ex.func3);
         id_ex.control = controlUnit;
 
         // if (id_ex.opcode == 0x67)
@@ -352,7 +377,8 @@ void Pipeline::ID_stage(int cycle)
                     }
                 }
             }
-            else {
+            else
+            {
                 ID_stall = false;
                 id_ex.no_op = false;
                 id_ex.forwardA = 0;
@@ -566,19 +592,25 @@ void Pipeline::ID_stage(int cycle)
                     id_ex.pc_new = id_ex.pc + 4;
                 }
             }
-            else if (id_ex.func3 == 4){
-                if (val1 < val2){
+            else if (id_ex.func3 == 4)
+            {
+                if (val1 < val2)
+                {
                     id_ex.pc_new = id_ex.pc + id_ex.imm;
                 }
-                else {
+                else
+                {
                     id_ex.pc_new = id_ex.pc + 4;
                 }
             }
-            else if (id_ex.func3 == 5){
-                if (val1 >= val2){
+            else if (id_ex.func3 == 5)
+            {
+                if (val1 >= val2)
+                {
                     id_ex.pc_new = id_ex.pc + id_ex.imm;
                 }
-                else {
+                else
+                {
                     id_ex.pc_new = id_ex.pc + 4;
                 }
             }
@@ -589,13 +621,13 @@ void Pipeline::ID_stage(int cycle)
     {
         // instr_decode.push_back(cycle);
         table[(id_ex.pc) / 4].push_back({"ID", cycle});
-        instr_decode.push_back({cycle, {(id_ex.pc) / 4,1}});
+        instr_decode.push_back({cycle, {(id_ex.pc) / 4, 1}});
     }
     if (earlier_stall)
     {
         cout << "earlier stall and free _latch set to false" << endl;
         if_id.free_latch = false;
-        instr_decode.push_back({cycle, {(id_ex.pc) / 4,0}});
+        instr_decode.push_back({cycle, {(id_ex.pc) / 4, 0}});
     }
 }
 
@@ -610,6 +642,8 @@ void Pipeline::EX_stage(int cycle)
         ex_mem.data2 = 0;
         ex_mem.no_op = true;
         ex_mem.rd = 0;
+        ex_mem.opcode = 0;
+        ex_mem.func3 = 0;
         return;
     }
 
@@ -648,7 +682,8 @@ void Pipeline::EX_stage(int cycle)
     {
         alu.result = id_ex.pc + 4;
     }
-    if (id_ex.opcode == 0x17) {
+    if (id_ex.opcode == 0x17)
+    {
         alu.result = id_ex.pc + id_ex.imm;
     }
     ex_mem.aluResult = alu.result;
@@ -663,8 +698,9 @@ void Pipeline::EX_stage(int cycle)
     ex_mem.pc = id_ex.pc;
     ex_mem.mem_forward = id_ex.mem_forward;
     ex_mem.opcode = id_ex.opcode;
+    ex_mem.func3 = id_ex.func3;
     table[(ex_mem.pc) / 4].push_back({"EX", cycle});
-    instr_execute.push_back({cycle, {(ex_mem.pc) / 4,1}});
+    instr_execute.push_back({cycle, {(ex_mem.pc) / 4, 1}});
 }
 
 // MEM_stage: Memory stage
@@ -678,6 +714,8 @@ void Pipeline::MEM_stage(int cycle)
         mem_wb.memData = 0;
         mem_wb.no_op = true;
         mem_wb.rd = 0;
+        mem_wb.opcode = 0;
+        mem_wb.func3 = 0;
         return;
     }
     if (forwardingEnabled)
@@ -692,6 +730,20 @@ void Pipeline::MEM_stage(int cycle)
     {
         cout << "to be read from mem" << endl;
         mem_wb.memData = memory[ex_mem.aluResult];
+        if (mem_wb.func3 == 0)
+        {
+            cout << "load byte instr." << endl;
+            mem_wb.memData = mem_wb.memData & 0xFF;
+        }
+        else if (mem_wb.func3 == 1)
+        {
+            cout << "load halfword instr." << endl;
+            mem_wb.memData = mem_wb.memData & 0xFFFF;
+        }
+        else
+        {
+            cout << "load word instr." << endl;
+        }
     }
     else if (ex_mem.control.memWrite)
     {
@@ -713,8 +765,9 @@ void Pipeline::MEM_stage(int cycle)
     // instr_memory.push_back(cycle);
     mem_wb.pc = ex_mem.pc;
     mem_wb.opcode = ex_mem.opcode;
+    mem_wb.func3 = ex_mem.func3;
     table[(mem_wb.pc) / 4].push_back({"DM", cycle});
-    instr_memory.push_back({cycle, {(mem_wb.pc) / 4,1}}); 
+    instr_memory.push_back({cycle, {(mem_wb.pc) / 4, 1}});
 }
 
 // WB_stage: Write-Back stage
@@ -748,7 +801,7 @@ void Pipeline::WB_stage(int cycle)
     }
     // instr_write.push_back(cycle);
     table[(mem_wb.pc) / 4].push_back({"WB", cycle});
-    instr_write.push_back({cycle, {(mem_wb.pc) / 4,1}});
+    instr_write.push_back({cycle, {(mem_wb.pc) / 4, 1}});
 }
 
 // Print pipeline state
@@ -915,154 +968,198 @@ string trim(const string &s)
 //     }
 // }
 
-void Pipeline :: printPipeline(int cycles){
-    for (int i=0;i<instructions.size();i++){
-        cout<<trim(instructions[i])<<";";
+void Pipeline ::printPipeline(int cycles)
+{
+    for (int i = 0; i < instructions.size(); i++)
+    {
+        cout << trim(instructions[i]) << ";";
         // int cycle_to_be_printed = 0;
-        
+
         int fetch_index = 0;
         int decode_index = 0;
         int ex_index = 0;
         int mem_index = 0;
         int write_index = 0;
-        for (int j=0;j<cycles;j++){
+        for (int j = 0; j < cycles; j++)
+        {
             int instr_printed_in_curr_cycle = 0;
-            if (instr_fetch[fetch_index].second.first == i){
-                if (instr_fetch[fetch_index].first == j){
-                    if (instr_fetch[fetch_index].second.second == 1){
-                        if (instr_printed_in_curr_cycle == 0){
-                            cout<<"IF";
+            if (instr_fetch[fetch_index].second.first == i)
+            {
+                if (instr_fetch[fetch_index].first == j)
+                {
+                    if (instr_fetch[fetch_index].second.second == 1)
+                    {
+                        if (instr_printed_in_curr_cycle == 0)
+                        {
+                            cout << "IF";
                         }
-                        else {
-                            cout<<"/IF";
+                        else
+                        {
+                            cout << "/IF";
                         }
-                        
                     }
-                    else {
-                        if (instr_printed_in_curr_cycle == 0){
-                            cout<<"-";
+                    else
+                    {
+                        if (instr_printed_in_curr_cycle == 0)
+                        {
+                            cout << "-";
                         }
-                        else {
-                            cout<<"/-";
+                        else
+                        {
+                            cout << "/-";
                         }
                     }
                     instr_printed_in_curr_cycle++;
                     fetch_index++;
                 }
             }
-            else {
+            else
+            {
                 fetch_index++;
             }
-            if (instr_decode[decode_index].second.first == i){
-                if (instr_decode[decode_index].first == j){
-                    if (instr_decode[decode_index].second.second == 1){
-                        if (instr_printed_in_curr_cycle == 0){
-                            cout<<"ID";
+            if (instr_decode[decode_index].second.first == i)
+            {
+                if (instr_decode[decode_index].first == j)
+                {
+                    if (instr_decode[decode_index].second.second == 1)
+                    {
+                        if (instr_printed_in_curr_cycle == 0)
+                        {
+                            cout << "ID";
                         }
-                        else {
-                            cout<<"/ID";
+                        else
+                        {
+                            cout << "/ID";
                         }
-                        
                     }
-                    else {
-                        if (instr_printed_in_curr_cycle == 0){
-                            cout<<"-";
+                    else
+                    {
+                        if (instr_printed_in_curr_cycle == 0)
+                        {
+                            cout << "-";
                         }
-                        else {
-                            cout<<"/-";
+                        else
+                        {
+                            cout << "/-";
                         }
                     }
                     instr_printed_in_curr_cycle++;
                     decode_index++;
                 }
             }
-            else {
+            else
+            {
                 decode_index++;
             }
-            if (instr_execute[ex_index].second.first == i){
-                if (instr_execute[ex_index].first == j){
-                    if (instr_execute[ex_index].second.second == 1){
-                        if (instr_printed_in_curr_cycle == 0){
-                            cout<<"EX";
+            if (instr_execute[ex_index].second.first == i)
+            {
+                if (instr_execute[ex_index].first == j)
+                {
+                    if (instr_execute[ex_index].second.second == 1)
+                    {
+                        if (instr_printed_in_curr_cycle == 0)
+                        {
+                            cout << "EX";
                         }
-                        else {
-                            cout<<"/EX";
+                        else
+                        {
+                            cout << "/EX";
                         }
-                        
                     }
-                    else {
-                        if (instr_printed_in_curr_cycle == 0){
-                            cout<<"-";
+                    else
+                    {
+                        if (instr_printed_in_curr_cycle == 0)
+                        {
+                            cout << "-";
                         }
-                        else {
-                            cout<<"/-";
+                        else
+                        {
+                            cout << "/-";
                         }
                     }
                     instr_printed_in_curr_cycle++;
                     ex_index++;
                 }
             }
-            else {
+            else
+            {
                 ex_index++;
             }
-            if (instr_memory[mem_index].second.first == i){
-                if (instr_memory[mem_index].first == j){
-                    if (instr_memory[mem_index].second.second == 1){
-                        if (instr_printed_in_curr_cycle == 0){
-                            cout<<"MEM";
+            if (instr_memory[mem_index].second.first == i)
+            {
+                if (instr_memory[mem_index].first == j)
+                {
+                    if (instr_memory[mem_index].second.second == 1)
+                    {
+                        if (instr_printed_in_curr_cycle == 0)
+                        {
+                            cout << "MEM";
                         }
-                        else {
-                            cout<<"/MEM";
+                        else
+                        {
+                            cout << "/MEM";
                         }
-                        
                     }
-                    else {
-                        if (instr_printed_in_curr_cycle == 0){
-                            cout<<"-";
+                    else
+                    {
+                        if (instr_printed_in_curr_cycle == 0)
+                        {
+                            cout << "-";
                         }
-                        else {
-                            cout<<"/-";
+                        else
+                        {
+                            cout << "/-";
                         }
                     }
                     instr_printed_in_curr_cycle++;
                     mem_index++;
                 }
             }
-            else {
+            else
+            {
                 mem_index++;
             }
-            if (instr_write[write_index].second.first == i){
-                if (instr_write[write_index].first == j){
-                    if (instr_write[write_index].second.second == 1){
-                        if (instr_printed_in_curr_cycle == 0){
-                            cout<<"WB";
+            if (instr_write[write_index].second.first == i)
+            {
+                if (instr_write[write_index].first == j)
+                {
+                    if (instr_write[write_index].second.second == 1)
+                    {
+                        if (instr_printed_in_curr_cycle == 0)
+                        {
+                            cout << "WB";
                         }
-                        else {
-                            cout<<"/WB";
+                        else
+                        {
+                            cout << "/WB";
                         }
-                        
                     }
-                    else {
-                        if (instr_printed_in_curr_cycle == 0){
-                            cout<<"-";
+                    else
+                    {
+                        if (instr_printed_in_curr_cycle == 0)
+                        {
+                            cout << "-";
                         }
-                        else {
-                            cout<<"/-";
+                        else
+                        {
+                            cout << "/-";
                         }
                     }
                     instr_printed_in_curr_cycle++;
                     write_index++;
                 }
             }
-            else {
+            else
+            {
                 write_index++;
             }
-            if (instr_printed_in_curr_cycle==0){
-                cout<<" ";
+            if (instr_printed_in_curr_cycle == 0)
+            {
+                cout << " ";
             }
-            cout<<";";
+            cout << ";";
         }
-        cout<<endl;
+        cout << endl;
     }
 }
 

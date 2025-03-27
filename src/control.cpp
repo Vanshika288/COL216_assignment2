@@ -44,6 +44,15 @@ void Control::setControl(uint32_t opcode, uint32_t funct3) {
                 aluOp = 6;
                 /* code */
                 break;
+            case 5:
+                regWrite = true;
+                aluSrc = true;
+                memRead = false;
+                memWrite = false;
+                memToReg = false;
+                aluOp = 7;
+                /* code */
+                break;
             default:
                 break;
             }

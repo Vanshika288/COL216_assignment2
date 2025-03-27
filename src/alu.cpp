@@ -42,7 +42,7 @@ void ALU::execute(uint8_t aluOp, int32_t input1, int32_t input2) {
             break;
 
         case 6:  // SLL (Shift Left Logical) slli
-            result = input1 << (input2);  // Masking for 5 bits
+            result = input1 << (input2 & 0x1F);  // Masking for 5 bits
             overflow = false;
             break;
 
